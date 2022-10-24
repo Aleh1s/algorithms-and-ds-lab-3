@@ -12,7 +12,7 @@ public class BlockSerializer {
     public static byte[] serialize(Block block) {
         ByteBuffer buffer = ByteBuffer.allocate(BLOCK_BYTES);
         for (IndexRecord record : block.getRecords())
-            buffer.put(IndexSerializer.serialize(record));
+            buffer.put(IndexRecordSerializer.serialize(record));
         return buffer.array();
     }
 }

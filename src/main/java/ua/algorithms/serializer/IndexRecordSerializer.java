@@ -6,7 +6,7 @@ import java.nio.ByteBuffer;
 
 import static ua.algorithms.structure.IndexRecord.INDEX_RECORD_BYTES;
 
-public class IndexSerializer {
+public class IndexRecordSerializer {
     public static byte[] serialize(IndexRecord record) {
         return ByteBuffer
                 .allocate(INDEX_RECORD_BYTES)
