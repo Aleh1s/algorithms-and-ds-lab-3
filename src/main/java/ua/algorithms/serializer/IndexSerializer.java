@@ -1,8 +1,10 @@
-package ua.algorithms;
+package ua.algorithms.serializer;
+
+import ua.algorithms.structure.IndexRecord;
 
 import java.nio.ByteBuffer;
 
-import static ua.algorithms.IndexRecord.INDEX_RECORD_BYTES;
+import static ua.algorithms.structure.IndexRecord.INDEX_RECORD_BYTES;
 
 public class IndexSerializer {
     public static byte[] serialize(IndexRecord record) {

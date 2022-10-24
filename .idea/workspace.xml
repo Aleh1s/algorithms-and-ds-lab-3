@@ -5,13 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3a613f23-a00e-4f19-909f-f04cfc1237ff" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/BlockSerializer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/IndexSerializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/Block.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/Block.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/IndexRecord.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/IndexRecord.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/Block.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/structure/Block.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/BlockSerializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/serializer/BlockSerializer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/DatumRecord.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/structure/DatumRecord.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/IndexRecord.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/structure/IndexRecord.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/IndexSerializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/serializer/IndexSerializer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,7 +54,7 @@
       <module name="lab-3" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="ua.algorithms.*" />
+          <option name="PATTERN" value="ua.algorithms.serializer.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -89,7 +87,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1666615129538</updated>
-      <workItem from="1666615130946" duration="3102000" />
+      <workItem from="1666615130946" duration="3402000" />
     </task>
     <servers />
   </component>

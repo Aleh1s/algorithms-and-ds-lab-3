@@ -1,4 +1,4 @@
-package ua.algorithms;
+package ua.algorithms.structure;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

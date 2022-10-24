@@ -1,8 +1,11 @@
-package ua.algorithms;
+package ua.algorithms.serializer;
+
+import ua.algorithms.structure.Block;
+import ua.algorithms.structure.IndexRecord;
 
 import java.nio.ByteBuffer;
 
-import static ua.algorithms.Block.BLOCK_BYTES;
+import static ua.algorithms.structure.Block.BLOCK_BYTES;
 
 public class BlockSerializer {
 
