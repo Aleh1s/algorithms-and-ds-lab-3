@@ -1,11 +1,14 @@
 package ua.algorithms;
 
+import lombok.Getter;
+
 import java.util.List;
 
+@Getter
 public class Block {
 
+    private int size; // curr size of data in block
     private List<IndexRecord> records;
-    private static final int BLOCK_BYTES = 1024; // size of block in bytes
-    private static final int RECORD_BYTES = 2 * Long.BYTES; // size of record (key + ptr)
+    public static final int BLOCK_BYTES = 1024; // size of block in bytes
 
 }
