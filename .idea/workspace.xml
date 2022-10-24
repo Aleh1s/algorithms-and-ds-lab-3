@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3a613f23-a00e-4f19-909f-f04cfc1237ff" name="Changes" comment="" />
+    <list default="true" id="3a613f23-a00e-4f19-909f-f04cfc1237ff" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/Block.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -33,6 +36,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
     "last_opened_file_path": "D:/Programming/bobocode",
     "node.js.detected.package.eslint": "true",
@@ -62,7 +66,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1666615129538</updated>
-      <workItem from="1666615130946" duration="821000" />
+      <workItem from="1666615130946" duration="1765000" />
     </task>
     <servers />
   </component>

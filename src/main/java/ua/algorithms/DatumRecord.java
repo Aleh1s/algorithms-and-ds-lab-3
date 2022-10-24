@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class Record {
+public class DatumRecord {
 
     private long id;
     private String value;
