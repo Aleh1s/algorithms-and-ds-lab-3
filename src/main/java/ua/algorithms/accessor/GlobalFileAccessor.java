@@ -5,7 +5,7 @@ import ua.algorithms.structure.DataBlock;
 
 import java.io.RandomAccessFile;
 
-import static ua.algorithms.structure.DataBlock.BLOCK_BYTES;
+import static ua.algorithms.structure.DataBlock.BYTES;
 
 
 public class GlobalFileAccessor extends FileAccessor {
@@ -20,7 +20,7 @@ public class GlobalFileAccessor extends FileAccessor {
 
     public DataBlock readBlock(long offset) {
         movePtr(offset);
-        return DataBlockSerializer.deserialize(read(BLOCK_BYTES));
+        return DataBlockSerializer.deserialize(read(BYTES));
     }
 
 }

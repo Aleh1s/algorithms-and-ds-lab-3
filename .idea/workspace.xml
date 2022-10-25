@@ -5,12 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3a613f23-a00e-4f19-909f-f04cfc1237ff" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/accessor/GlobalFileAccessor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/accessor/IndexFileAccessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/accessor/FileAccessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/accessor/FileAccessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/accessor/GlobalFileAccessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/accessor/GlobalFileAccessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/accessor/IndexFileAccessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/accessor/IndexFileAccessor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/serializer/DataBlockSerializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/serializer/DataBlockSerializer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/serializer/DatumRecordSerializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/serializer/DatumRecordSerializer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/serializer/IndexBlockSerializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/serializer/IndexBlockSerializer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/serializer/IndexRecordSerializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/serializer/IndexRecordSerializer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/structure/DataBlock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/structure/DataBlock.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/structure/DatumRecord.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/structure/DatumRecord.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/structure/IndexBlock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/structure/IndexBlock.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/structure/IndexRecord.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/structure/IndexRecord.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,20 +41,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "D:/KPI/Algorithms/Labs/lab-3/test.bin",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "settings.editor.selected.configurable": "preferences.fileTypes"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/KPI/Algorithms/Labs/lab-3/test.bin&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.fileTypes&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="ua.algorithms.accessor" />

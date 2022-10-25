@@ -7,13 +7,10 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ua.algorithms.structure.DataBlock.RECORDS_OFFSET;
-import static ua.algorithms.structure.DatumRecord.DATUM_RECORD_BYTES;
-
 public class DataBlockSerializer {
 
     public static byte[] serialize(DataBlock dataBlock) {
-        ByteBuffer buffer = ByteBuffer.allocate(DataBlock.BLOCK_BYTES)
+        ByteBuffer buffer = ByteBuffer.allocate(DataBlock.BYTES)
                 .putInt(dataBlock.getSize());
         for (DatumRecord datumRecord : dataBlock.getRecords())
             buffer.put(DatumRecordSerializer.serialize(datumRecord));
@@ -21,11 +18,12 @@ public class DataBlockSerializer {
     }
 
     public static DataBlock deserialize(byte[] bytes) {
-        int size = ByteBuffer.wrap(bytes).getInt();
+        int size = ByteBuffer.wrap(bytes)
+                .getInt(DataBlock.SIZE_OFFSET);
         List<DatumRecord> records = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
-            byte[] datumRecordBytes = new byte[DATUM_RECORD_BYTES];
-            ByteBuffer.wrap(bytes).get(RECORDS_OFFSET + i * DATUM_RECORD_BYTES, datumRecordBytes);
+            byte[] datumRecordBytes = new byte[DatumRecord.BYTES];
+            ByteBuffer.wrap(bytes).get(DataBlock.RECORDS_OFFSET + i * DatumRecord.BYTES, datumRecordBytes);
             records.add(DatumRecordSerializer.deserialize(datumRecordBytes));
         }
         return new DataBlock(size, records);

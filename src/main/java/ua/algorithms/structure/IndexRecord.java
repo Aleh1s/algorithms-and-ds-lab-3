@@ -9,7 +9,11 @@ public class IndexRecord implements Comparable<IndexRecord> {
 
     private final long pk; // primary key of datum record (id)
     private final long ptr; // pointer to global area
-    public static final int INDEX_RECORD_BYTES = 2 * Long.BYTES;
+    public static final int PRIMARY_KEY_OFFSET = 0;
+    public static final int PRIMARY_KEY_BYTES = Long.BYTES;
+    public static final int POINTER_OFFSET = PRIMARY_KEY_OFFSET + PRIMARY_KEY_BYTES;
+    public static final int POINTER_BYTES = Long.BYTES;
+    public static final int BYTES = PRIMARY_KEY_BYTES + POINTER_BYTES;
 
     @Override
     public int compareTo(IndexRecord o) {

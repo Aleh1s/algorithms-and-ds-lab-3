@@ -5,7 +5,7 @@ import ua.algorithms.structure.IndexBlock;
 
 import java.io.RandomAccessFile;
 
-import static ua.algorithms.structure.IndexBlock.BLOCK_BYTES;
+import static ua.algorithms.structure.IndexBlock.BYTES;
 
 public class IndexFileAccessor extends FileAccessor {
     public IndexFileAccessor(RandomAccessFile raf, String fileName) {
@@ -19,6 +19,6 @@ public class IndexFileAccessor extends FileAccessor {
 
     public IndexBlock readBlock(long offset) {
         movePtr(offset);
-        return IndexBlockSerializer.deserialize(read(BLOCK_BYTES));
+        return IndexBlockSerializer.deserialize(read(BYTES));
     }
 }

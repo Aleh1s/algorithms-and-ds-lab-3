@@ -4,20 +4,19 @@ import ua.algorithms.structure.IndexRecord;
 
 import java.nio.ByteBuffer;
 
-import static ua.algorithms.structure.IndexRecord.INDEX_RECORD_BYTES;
-
 public class IndexRecordSerializer {
     public static byte[] serialize(IndexRecord record) {
         return ByteBuffer
-                .allocate(INDEX_RECORD_BYTES)
+                .allocate(IndexRecord.BYTES)
                 .putLong(record.getPk())
                 .putLong(record.getPtr())
                 .array();
     }
 
     public static IndexRecord deserialize(byte[] bytes) {
-        long pk = ByteBuffer.wrap(bytes).getLong(0);
-        long ptr = ByteBuffer.wrap(bytes).getLong(8);
+        ByteBuffer wrap = ByteBuffer.wrap(bytes);
+        long pk = wrap.getLong(IndexRecord.PRIMARY_KEY_OFFSET);
+        long ptr = wrap.getLong(IndexRecord.POINTER_OFFSET);
         return new IndexRecord(pk, ptr);
     }
 }
