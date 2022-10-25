@@ -51,29 +51,32 @@ public class Main {
                 globalFileAccessor
         );
 
-        indexFileAccessor.clearFile();
-        globalFileAccessor.clearFile();
-
-        List<Integer> list = new LinkedList<>();
-        IntStream.range(1, 100_001).forEach(list::add);
-        Collections.shuffle(list);
-        Queue<Integer> ids = new LinkedList<>(list);
-
-        for (int i = 0; i < 100_000; i++) {
-            Integer id = ids.poll();
-            if (id != null) {
-                simpleRepository.addDatumRecord(
-                        new DatumRecord(id, "value%d".formatted(id)));
-            }
-        }
-
-        long numberOfBlocks = indexFileAccessor.countNumberOfBlock();
-
-        for (int i = 0; i < numberOfBlocks; i++) {
-            IndexBlock indexBlock = indexFileAccessor.readBlock((long) i * IndexBlock.BYTES);
-            System.out.printf("BLOCK%d%n", i);
-            printRecords(indexBlock.getRecords());
-        }
+        simpleRepository.update(100, "Hello Alex");
+        DatumRecord datumRecord = simpleRepository.find(100);
+        System.out.println(datumRecord);
+//        indexFileAccessor.clearFile();
+//        globalFileAccessor.clearFile();
+//
+//        List<Integer> list = new LinkedList<>();
+//        IntStream.range(1, 100_001).forEach(list::add);
+//        Collections.shuffle(list);
+//        Queue<Integer> ids = new LinkedList<>(list);
+//
+//        for (int i = 0; i < 100_000; i++) {
+//            Integer id = ids.poll();
+//            if (id != null) {
+//                simpleRepository.addDatumRecord(
+//                        new DatumRecord(id, "value%d".formatted(id)));
+//            }
+//        }
+//
+//        long numberOfBlocks = indexFileAccessor.countNumberOfBlocks();
+//
+//        for (int i = 0; i < numberOfBlocks; i++) {
+//            IndexBlock indexBlock = indexFileAccessor.readBlock((long) i * IndexBlock.BYTES);
+//            System.out.printf("BLOCK%d%n", i);
+//            printRecords(indexBlock.getRecords());
+//        }
     }
 
     public static void printRecords(List<IndexRecord> list) {

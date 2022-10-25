@@ -17,6 +17,16 @@ public class GlobalFileAccessor extends FileAccessor {
         return offset;
     }
 
+    public void update(DatumRecord datumRecord, long offset) {
+        movePtr(offset);
+        write(DatumRecordSerializer.serialize(datumRecord));
+    }
+
+    public DatumRecord read(long offset) {
+        movePtr(offset);
+        return DatumRecordSerializer.deserialize(read(DatumRecord.BYTES));
+    }
+
     public boolean isEmpty() {
         return getSizeOfFile() == 0;
     }
