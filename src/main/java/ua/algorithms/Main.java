@@ -1,11 +1,7 @@
 package ua.algorithms;
 
 import ua.algorithms.accessor.FileAccessor;
-import ua.algorithms.structure.Block;
 import ua.algorithms.structure.DatumRecord;
-import ua.algorithms.structure.IndexRecord;
-
-import java.util.List;
 
 public class Main {
     public static void main(String[] args) {

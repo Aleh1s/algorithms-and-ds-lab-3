@@ -2,14 +2,14 @@ package ua.algorithms.accessor;
 
 import ua.algorithms.serializer.BlockSerializer;
 import ua.algorithms.serializer.DatumRecordSerializer;
-import ua.algorithms.structure.Block;
+import ua.algorithms.structure.IndexBlock;
 import ua.algorithms.structure.DatumRecord;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
-import static ua.algorithms.structure.Block.BLOCK_BYTES;
+import static ua.algorithms.structure.IndexBlock.BLOCK_BYTES;
 import static ua.algorithms.structure.DatumRecord.DATUM_RECORD_BYTES;
 
 public class FileAccessor {
@@ -31,12 +31,12 @@ public class FileAccessor {
         return new FileAccessor(raf, fileName);
     }
 
-    public void write(Block block, long offset) {
+    public void write(IndexBlock indexBlock, long offset) {
         movePtr(offset);
-        write(BlockSerializer.serialize(block));
+        write(BlockSerializer.serialize(indexBlock));
     }
 
-    public Block readBlock(long offset) {
+    public IndexBlock readBlock(long offset) {
         movePtr(offset);
         return BlockSerializer.deserialize(read(BLOCK_BYTES));
     }

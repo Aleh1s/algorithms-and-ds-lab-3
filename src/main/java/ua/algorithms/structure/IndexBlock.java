@@ -4,13 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.List;
-import java.util.PriorityQueue;
-
-import static ua.algorithms.structure.IndexRecord.INDEX_RECORD_BYTES;
 
 @Getter
 @AllArgsConstructor
-public class Block {
+public class IndexBlock {
 
     private int size; // curr size of data in block
     private List<IndexRecord> records;
