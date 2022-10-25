@@ -1,6 +1,6 @@
 package ua.algorithms.accessor;
 
-import ua.algorithms.serializer.BlockSerializer;
+import ua.algorithms.serializer.IndexBlockSerializer;
 import ua.algorithms.serializer.DatumRecordSerializer;
 import ua.algorithms.structure.IndexBlock;
 import ua.algorithms.structure.DatumRecord;
@@ -33,12 +33,12 @@ public class FileAccessor {
 
     public void write(IndexBlock indexBlock, long offset) {
         movePtr(offset);
-        write(BlockSerializer.serialize(indexBlock));
+        write(IndexBlockSerializer.serialize(indexBlock));
     }
 
     public IndexBlock readBlock(long offset) {
         movePtr(offset);
-        return BlockSerializer.deserialize(read(BLOCK_BYTES));
+        return IndexBlockSerializer.deserialize(read(BLOCK_BYTES));
     }
 
     public long write(DatumRecord datumRecord) { // return position of new record

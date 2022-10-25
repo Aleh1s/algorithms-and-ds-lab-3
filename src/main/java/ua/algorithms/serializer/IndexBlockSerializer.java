@@ -11,7 +11,7 @@ import static ua.algorithms.structure.IndexBlock.BLOCK_BYTES;
 import static ua.algorithms.structure.IndexBlock.RECORDS_OFFSET;
 import static ua.algorithms.structure.IndexRecord.INDEX_RECORD_BYTES;
 
-public class BlockSerializer {
+public class IndexBlockSerializer {
     public static byte[] serialize(IndexBlock indexBlock) {
         ByteBuffer buffer = ByteBuffer.allocate(BLOCK_BYTES)
                 .putInt(indexBlock.getSize());
