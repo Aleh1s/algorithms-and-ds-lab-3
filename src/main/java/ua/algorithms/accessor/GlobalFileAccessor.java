@@ -23,4 +23,7 @@ public class GlobalFileAccessor extends FileAccessor {
         return DataBlockSerializer.deserialize(read(BYTES));
     }
 
+    public boolean isEmpty() {
+        return getSizeOfFile() == 0;
+    }
 }

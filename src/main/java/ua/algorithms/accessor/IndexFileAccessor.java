@@ -21,4 +21,8 @@ public class IndexFileAccessor extends FileAccessor {
         movePtr(offset);
         return IndexBlockSerializer.deserialize(read(BYTES));
     }
+
+    public long countNumberOfBlock() {
+        return getSizeOfFile() / BYTES;
+    }
 }
