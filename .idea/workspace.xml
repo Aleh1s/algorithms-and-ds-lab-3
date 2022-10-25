@@ -5,14 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3a613f23-a00e-4f19-909f-f04cfc1237ff" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/accessor/FileAccessor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/repository/SimpleRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/serializer/DatumRecordSerializer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/serializer/BlockSerializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/serializer/BlockSerializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/serializer/IndexRecordSerializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/serializer/IndexRecordSerializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/structure/Block.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/structure/Block.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/structure/IndexRecord.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/structure/IndexRecord.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/accessor/FileAccessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/accessor/FileAccessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/repository/SimpleRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/repository/SimpleRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/structure/DatumRecord.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/structure/DatumRecord.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,6 +50,11 @@
     "settings.editor.selected.configurable": "preferences.fileTypes"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="ua.algorithms.serializer" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="ua.algorithms.Main" />
@@ -94,7 +97,7 @@
       <workItem from="1666615130946" duration="6412000" />
       <workItem from="1666631168689" duration="3752000" />
       <workItem from="1666680104656" duration="568000" />
-      <workItem from="1666680699028" duration="66000" />
+      <workItem from="1666680699028" duration="3580000" />
     </task>
     <servers />
   </component>

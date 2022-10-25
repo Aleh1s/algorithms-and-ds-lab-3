@@ -1,16 +1,19 @@
 package ua.algorithms.accessor;
 
 import ua.algorithms.serializer.BlockSerializer;
+import ua.algorithms.serializer.DatumRecordSerializer;
 import ua.algorithms.structure.Block;
+import ua.algorithms.structure.DatumRecord;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
 import static ua.algorithms.structure.Block.BLOCK_BYTES;
+import static ua.algorithms.structure.DatumRecord.DATUM_RECORD_BYTES;
 
 public class FileAccessor {
-    private String fileName;
+    private final String fileName;
     private final RandomAccessFile access;
 
     public FileAccessor(RandomAccessFile access, String fileName) {
@@ -28,7 +31,7 @@ public class FileAccessor {
         return new FileAccessor(raf, fileName);
     }
 
-    public void writeBlock(Block block, long offset) {
+    public void write(Block block, long offset) {
         movePtr(offset);
         write(BlockSerializer.serialize(block));
     }
@@ -36,6 +39,18 @@ public class FileAccessor {
     public Block readBlock(long offset) {
         movePtr(offset);
         return BlockSerializer.deserialize(read(BLOCK_BYTES));
+    }
+
+    public long write(DatumRecord datumRecord) { // return position of new record
+        long sizeOfFile = getSizeOfFile();
+        movePtr(sizeOfFile);
+        write(DatumRecordSerializer.serialize(datumRecord));
+        return sizeOfFile / DATUM_RECORD_BYTES;
+    }
+
+    public DatumRecord readDatum(long offset) {
+        movePtr(offset);
+        return DatumRecordSerializer.deserialize(read(DATUM_RECORD_BYTES));
     }
 
     private byte[] read(int length) {
@@ -69,6 +84,14 @@ public class FileAccessor {
             return access.length();
         } catch (IOException e) {
             throw new RuntimeException("Can not get length of file %s".formatted(fileName), e);
+        }
+    }
+
+    public void clearFile() {
+        try {
+            access.setLength(0);
+        } catch (IOException e) {
+            throw new RuntimeException("Can not set length of file [%s]".formatted(fileName), e);
         }
     }
 
