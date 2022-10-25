@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class DatumRecord {
+public class DatumRecord implements Comparable<DatumRecord> {
 
     private long id;
     private String value;
@@ -27,5 +27,10 @@ public class DatumRecord {
         sb.append(", value='").append(value).append('\'');
         sb.append('}');
         return sb.toString();
+    }
+
+    @Override
+    public int compareTo(DatumRecord o) {
+        return Long.compare(this.id, o.id);
     }
 }
