@@ -1,7 +1,15 @@
 package ua.algorithms;
 
 import ua.algorithms.accessor.FileAccessor;
+import ua.algorithms.accessor.GlobalFileAccessor;
+import ua.algorithms.accessor.IndexFileAccessor;
+import ua.algorithms.repository.SimpleRepository;
 import ua.algorithms.structure.DatumRecord;
+import ua.algorithms.structure.IndexBlock;
+import ua.algorithms.structure.IndexRecord;
+
+import java.util.*;
+import java.util.stream.IntStream;
 
 public class Main {
     public static void main(String[] args) {
@@ -33,5 +41,44 @@ public class Main {
 //        System.out.println(datumRecord);
 //        DatumRecord datumRecord1 = fileAccessor.readDatum(w2 * DatumRecord.DATUM_RECORD_BYTES);
 //        System.out.println(datumRecord1);
+
+        IndexFileAccessor indexFileAccessor =
+                (IndexFileAccessor) FileAccessor.of("D:\\KPI\\Algorithms\\Labs\\lab-3\\src\\main\\resources\\index.bin", "INDEX");
+        GlobalFileAccessor globalFileAccessor =
+                (GlobalFileAccessor) FileAccessor.of("D:\\KPI\\Algorithms\\Labs\\lab-3\\src\\main\\resources\\global.bin", "GLOBAL");
+        SimpleRepository simpleRepository = new SimpleRepository(
+                indexFileAccessor,
+                globalFileAccessor
+        );
+
+        indexFileAccessor.clearFile();
+        globalFileAccessor.clearFile();
+
+        List<Integer> list = new LinkedList<>();
+        IntStream.range(1, 100_001).forEach(list::add);
+        Collections.shuffle(list);
+        Queue<Integer> ids = new LinkedList<>(list);
+
+        for (int i = 0; i < 100_000; i++) {
+            Integer id = ids.poll();
+            if (id != null) {
+                simpleRepository.addDatumRecord(
+                        new DatumRecord(id, "value%d".formatted(id)));
+            }
+        }
+
+        long numberOfBlocks = indexFileAccessor.countNumberOfBlock();
+
+        for (int i = 0; i < numberOfBlocks; i++) {
+            IndexBlock indexBlock = indexFileAccessor.readBlock((long) i * IndexBlock.BYTES);
+            System.out.printf("BLOCK%d%n", i);
+            printRecords(indexBlock.getRecords());
+        }
+    }
+
+    public static void printRecords(List<IndexRecord> list) {
+        for (IndexRecord i : list) {
+            System.out.println(i);
+        }
     }
 }

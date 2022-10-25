@@ -1,26 +1,20 @@
 package ua.algorithms.accessor;
 
-import ua.algorithms.serializer.DataBlockSerializer;
-import ua.algorithms.structure.DataBlock;
+import ua.algorithms.serializer.DatumRecordSerializer;
+import ua.algorithms.structure.DatumRecord;
 
 import java.io.RandomAccessFile;
-
-import static ua.algorithms.structure.DataBlock.BYTES;
-
 
 public class GlobalFileAccessor extends FileAccessor {
     public GlobalFileAccessor(RandomAccessFile access, String fileName) {
         super(access, fileName);
     }
 
-    public void write(DataBlock dataBlock, long offset) {
+    public long write(DatumRecord datumRecord) {
+        long offset = getSizeOfFile();
         movePtr(offset);
-        write(DataBlockSerializer.serialize(dataBlock));
-    }
-
-    public DataBlock readBlock(long offset) {
-        movePtr(offset);
-        return DataBlockSerializer.deserialize(read(BYTES));
+        write(DatumRecordSerializer.serialize(datumRecord));
+        return offset;
     }
 
     public boolean isEmpty() {
