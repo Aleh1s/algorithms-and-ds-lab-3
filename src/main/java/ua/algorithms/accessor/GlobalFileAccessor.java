@@ -22,5 +22,4 @@ public class GlobalFileAccessor extends FileAccessor {
         movePtr(offset);
         return DataBlockSerializer.deserialize(read(BLOCK_BYTES));
     }
-
 }

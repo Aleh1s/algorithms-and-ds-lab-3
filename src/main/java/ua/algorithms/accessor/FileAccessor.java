@@ -1,16 +1,8 @@
 package ua.algorithms.accessor;
 
-import ua.algorithms.serializer.IndexBlockSerializer;
-import ua.algorithms.serializer.DatumRecordSerializer;
-import ua.algorithms.structure.IndexBlock;
-import ua.algorithms.structure.DatumRecord;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-
-import static ua.algorithms.structure.IndexBlock.BLOCK_BYTES;
-import static ua.algorithms.structure.DatumRecord.DATUM_RECORD_BYTES;
 
 public abstract class FileAccessor {
     protected final String fileName;
@@ -89,5 +81,9 @@ public abstract class FileAccessor {
         } catch (IOException e) {
             throw new RuntimeException("Can not set length of file [%s]".formatted(fileName), e);
         }
+    }
+
+    public boolean isEmpty() {
+        return getSizeOfFile() == 0;
     }
 }
