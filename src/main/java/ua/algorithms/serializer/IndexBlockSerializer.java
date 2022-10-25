@@ -7,13 +7,9 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ua.algorithms.structure.IndexBlock.BLOCK_BYTES;
-import static ua.algorithms.structure.IndexBlock.RECORDS_OFFSET;
-import static ua.algorithms.structure.IndexRecord.INDEX_RECORD_BYTES;
-
 public class IndexBlockSerializer {
     public static byte[] serialize(IndexBlock indexBlock) {
-        ByteBuffer buffer = ByteBuffer.allocate(BLOCK_BYTES)
+        ByteBuffer buffer = ByteBuffer.allocate(IndexBlock.BYTES)
                 .putInt(indexBlock.getSize());
         for (IndexRecord record : indexBlock.getRecords())
             buffer.put(IndexRecordSerializer.serialize(record));
@@ -21,11 +17,12 @@ public class IndexBlockSerializer {
     }
 
     public static IndexBlock deserialize(byte[] bytes) {
-        int size = ByteBuffer.wrap(bytes).getInt();
+        ByteBuffer wrap = ByteBuffer.wrap(bytes);
+        int size = wrap.getInt(IndexBlock.SIZE_OFFSET);
         List<IndexRecord> records = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
-            byte[] indexRecordBytes = new byte[INDEX_RECORD_BYTES];
-            ByteBuffer.wrap(bytes).get(RECORDS_OFFSET + i * INDEX_RECORD_BYTES, indexRecordBytes);
+            byte[] indexRecordBytes = new byte[IndexRecord.BYTES];
+            wrap.get(IndexBlock.RECORDS_OFFSET + i * IndexRecord.BYTES, indexRecordBytes);
             records.add(IndexRecordSerializer.deserialize(indexRecordBytes));
         }
         return new IndexBlock(size, records);
