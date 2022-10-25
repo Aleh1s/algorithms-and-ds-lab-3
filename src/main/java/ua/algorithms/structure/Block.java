@@ -1,14 +1,31 @@
 package ua.algorithms.structure;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.List;
+import java.util.PriorityQueue;
+
+import static ua.algorithms.structure.IndexRecord.INDEX_RECORD_BYTES;
 
 @Getter
+@AllArgsConstructor
 public class Block {
 
     private int size; // curr size of data in block
     private List<IndexRecord> records;
-    public static final int BLOCK_BYTES = 1024; // size of block in bytes
+    public static final int SIZE_OFFSET = 0;
+    public static final int SIZE_BYTES = Integer.BYTES;
+    public static final int RECORDS_BYTES = 1024;
+    public static final int RECORDS_OFFSET = SIZE_OFFSET + SIZE_BYTES;
+    public static final int BLOCK_BYTES = SIZE_BYTES + RECORDS_BYTES; // size of block in bytes
 
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("Block{");
+        sb.append("size=").append(size);
+        sb.append(", records=").append(records);
+        sb.append('}');
+        return sb.toString();
+    }
 }

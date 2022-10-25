@@ -14,4 +14,10 @@ public class IndexRecordSerializer {
                 .putLong(record.getPtr())
                 .array();
     }
+
+    public static IndexRecord deserialize(byte[] bytes) {
+        long pk = ByteBuffer.wrap(bytes).getLong(0);
+        long ptr = ByteBuffer.wrap(bytes).getLong(8);
+        return new IndexRecord(pk, ptr);
+    }
 }
