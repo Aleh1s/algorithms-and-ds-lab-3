@@ -12,48 +12,44 @@ import java.io.RandomAccessFile;
 import static ua.algorithms.structure.IndexBlock.BLOCK_BYTES;
 import static ua.algorithms.structure.DatumRecord.DATUM_RECORD_BYTES;
 
-public class FileAccessor {
-    private final String fileName;
-    private final RandomAccessFile access;
+public abstract class FileAccessor {
+    protected final String fileName;
+    protected final RandomAccessFile access;
 
     public FileAccessor(RandomAccessFile access, String fileName) {
         this.access = access;
         this.fileName = fileName;
     }
 
-    public static FileAccessor of(String fileName) {
+    public static FileAccessor of(String fileName, String accessor) {
         RandomAccessFile raf;
         try {
             raf = new RandomAccessFile(fileName, "rw");
         } catch (FileNotFoundException e) {
             throw new RuntimeException("File [%s] does not exist".formatted(fileName), e);
         }
-        return new FileAccessor(raf, fileName);
+
+        if (accessor.equals("GLOBAL"))
+            return new GlobalFileAccessor(raf, fileName);
+        else if (accessor.equals("INDEX"))
+            return new IndexFileAccessor(raf, fileName);
+        else
+            throw new IllegalArgumentException("Bad file accessor");
     }
 
-    public void write(IndexBlock indexBlock, long offset) {
-        movePtr(offset);
-        write(IndexBlockSerializer.serialize(indexBlock));
-    }
+//    public long write(DatumRecord datumRecord) { // return position of new record
+//        long sizeOfFile = getSizeOfFile();
+//        movePtr(sizeOfFile);
+//        write(DatumRecordSerializer.serialize(datumRecord));
+//        return sizeOfFile / DATUM_RECORD_BYTES;
+//    }
+//
+//    public DatumRecord readDatum(long offset) {
+//        movePtr(offset);
+//        return DatumRecordSerializer.deserialize(read(DATUM_RECORD_BYTES));
+//    }
 
-    public IndexBlock readBlock(long offset) {
-        movePtr(offset);
-        return IndexBlockSerializer.deserialize(read(BLOCK_BYTES));
-    }
-
-    public long write(DatumRecord datumRecord) { // return position of new record
-        long sizeOfFile = getSizeOfFile();
-        movePtr(sizeOfFile);
-        write(DatumRecordSerializer.serialize(datumRecord));
-        return sizeOfFile / DATUM_RECORD_BYTES;
-    }
-
-    public DatumRecord readDatum(long offset) {
-        movePtr(offset);
-        return DatumRecordSerializer.deserialize(read(DATUM_RECORD_BYTES));
-    }
-
-    private byte[] read(int length) {
+    protected byte[] read(int length) {
         byte[] bytes = new byte[length];
         try {
             access.read(bytes);
@@ -63,7 +59,7 @@ public class FileAccessor {
         return bytes;
     }
 
-    private void write(byte[] bytes) {
+    protected void write(byte[] bytes) {
         try {
             access.write(bytes, 0, bytes.length);
         } catch (IOException e) {
@@ -71,7 +67,7 @@ public class FileAccessor {
         }
     }
 
-    private void movePtr(long offset) {
+    protected void movePtr(long offset) {
         try {
             access.seek(offset);
         } catch (IOException e) {
@@ -94,5 +90,4 @@ public class FileAccessor {
             throw new RuntimeException("Can not set length of file [%s]".formatted(fileName), e);
         }
     }
-
 }

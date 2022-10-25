@@ -2,7 +2,6 @@ package ua.algorithms.serializer;
 
 import ua.algorithms.structure.DataBlock;
 import ua.algorithms.structure.DatumRecord;
-import ua.algorithms.structure.IndexBlock;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -31,5 +30,5 @@ public class DataBlockSerializer {
         }
         return new DataBlock(size, records);
     }
-    
+
 }

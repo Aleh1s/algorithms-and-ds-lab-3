@@ -19,19 +19,19 @@ public class Main {
 //
 //        System.out.println(read);
 
-        DatumRecord d1 = new DatumRecord(1, "Hello");
-        DatumRecord d2 = new DatumRecord(2, "How are you?");
-
-        FileAccessor fileAccessor = FileAccessor.of("test.bin");
-        fileAccessor.clearFile();
-        long w1 = fileAccessor.write(d1);
-        System.out.println(w1);
-        long w2 = fileAccessor.write(d2);
-        System.out.println(w2);
-
-        DatumRecord datumRecord = fileAccessor.readDatum(w1 * DatumRecord.DATUM_RECORD_BYTES);
-        System.out.println(datumRecord);
-        DatumRecord datumRecord1 = fileAccessor.readDatum(w2 * DatumRecord.DATUM_RECORD_BYTES);
-        System.out.println(datumRecord1);
+//        DatumRecord d1 = new DatumRecord(1, "Hello");
+//        DatumRecord d2 = new DatumRecord(2, "How are you?");
+//
+//        FileAccessor fileAccessor = FileAccessor.of("test.bin");
+//        fileAccessor.clearFile();
+//        long w1 = fileAccessor.write(d1);
+//        System.out.println(w1);
+//        long w2 = fileAccessor.write(d2);
+//        System.out.println(w2);
+//
+//        DatumRecord datumRecord = fileAccessor.readDatum(w1 * DatumRecord.DATUM_RECORD_BYTES);
+//        System.out.println(datumRecord);
+//        DatumRecord datumRecord1 = fileAccessor.readDatum(w2 * DatumRecord.DATUM_RECORD_BYTES);
+//        System.out.println(datumRecord1);
     }
 }
