@@ -17,8 +17,8 @@ public class IndexFileAccessor extends FileAccessor {
         write(IndexBlockSerializer.serialize(indexBlock));
     }
 
-    public IndexBlock readBlock(long offset) {
-        movePtr(offset);
+    public IndexBlock readBlock(int blockNumber) {
+        movePtr((long) blockNumber * BYTES);
         return IndexBlockSerializer.deserialize(read(BYTES));
     }
 
