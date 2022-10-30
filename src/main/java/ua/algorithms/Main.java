@@ -5,12 +5,9 @@ import ua.algorithms.accessor.GlobalFileAccessor;
 import ua.algorithms.accessor.IndexFileAccessor;
 import ua.algorithms.repository.SimpleRepository;
 import ua.algorithms.structure.DatumRecord;
-import ua.algorithms.structure.IndexBlock;
 
 import java.math.RoundingMode;
-import java.util.Arrays;
 import java.util.Optional;
-import java.util.stream.IntStream;
 
 import static com.google.common.math.LongMath.*;
 import static java.lang.Math.pow;
@@ -28,7 +25,7 @@ public class Main {
                 globalFileAccessor
         );
 
-        Optional<DatumRecord> datumRecord = simpleRepository.find(23452);
+        Optional<DatumRecord> datumRecord = simpleRepository.findById(23452);
         datumRecord.ifPresent(System.out::println);
 
 //        int[] arr1 = {2, 5, 8, 9, 12, 16, 19, 20, 23, 25, 27, 35};

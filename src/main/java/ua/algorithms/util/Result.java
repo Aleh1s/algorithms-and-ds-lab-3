@@ -5,8 +5,8 @@ import ua.algorithms.structure.IndexRecord;
 import java.util.Objects;
 
 public class Result {
-    private IndexRecord value;
-    private int indicator;
+    private final IndexRecord value;
+    private final int indicator;
 
     private Result(IndexRecord value, int indicator) {
         this.value = value;

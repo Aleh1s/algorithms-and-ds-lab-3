@@ -10,7 +10,6 @@ import ua.algorithms.util.Result;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 import static com.google.common.math.LongMath.log2;
@@ -24,7 +23,7 @@ public class SimpleRepository {
         this.globalArea = globalArea;
     }
 
-    public Optional<DatumRecord> find(int id) {
+    public Optional<DatumRecord> findById(int id) {
         Optional<IndexRecord> indexRecordOptional = search(id);
 
         if (indexRecordOptional.isPresent()) {

@@ -29,18 +29,6 @@ public abstract class FileAccessor {
             throw new IllegalArgumentException("Bad file accessor");
     }
 
-//    public long write(DatumRecord datumRecord) { // return position of new record
-//        long sizeOfFile = getSizeOfFile();
-//        movePtr(sizeOfFile);
-//        write(DatumRecordSerializer.serialize(datumRecord));
-//        return sizeOfFile / DATUM_RECORD_BYTES;
-//    }
-//
-//    public DatumRecord readDatum(long offset) {
-//        movePtr(offset);
-//        return DatumRecordSerializer.deserialize(read(DATUM_RECORD_BYTES));
-//    }
-
     protected byte[] read(int length) {
         byte[] bytes = new byte[length];
         try {
