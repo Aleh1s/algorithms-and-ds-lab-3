@@ -12,8 +12,8 @@ public class IndexFileAccessor extends FileAccessor {
         super(raf, fileName);
     }
 
-    public void write(IndexBlock indexBlock, long offset) {
-        movePtr(offset);
+    public void write(IndexBlock indexBlock, int blockNumber) {
+        movePtr((long) blockNumber * BYTES);
         write(IndexBlockSerializer.serialize(indexBlock));
     }
 

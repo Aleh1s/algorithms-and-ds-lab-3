@@ -8,6 +8,7 @@ import ua.algorithms.structure.DatumRecord;
 
 import java.math.RoundingMode;
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 import static com.google.common.math.LongMath.*;
 import static java.lang.Math.pow;
@@ -25,8 +26,28 @@ public class Main {
                 globalFileAccessor
         );
 
-        Optional<DatumRecord> datumRecord = simpleRepository.findById(23452);
-        datumRecord.ifPresent(System.out::println);
+        indexFileAccessor.clearFile();
+        globalFileAccessor.clearFile();
+
+        IntStream.range(0, 10_000)
+                .forEach(i -> {
+                    DatumRecord dr = new DatumRecord(i, "value%d".formatted(i));
+                    if (i % 2 == 0)
+                        simpleRepository.addDatumRecord(dr);
+                });
+
+        IntStream.range(0, 10_000)
+                .forEach(i -> {
+                    DatumRecord dr = new DatumRecord(i, "value%d".formatted(i));
+                    if (i % 2 != 0)
+                        simpleRepository.addDatumRecord(dr);
+                });
+
+        IntStream.range(0, 10_000)
+                .forEach(i -> {
+                    Optional<DatumRecord> d1 = simpleRepository.findById(i);
+                    d1.ifPresentOrElse(System.out::println, () -> System.out.println(i + " - does not exist"));
+                });
 
 //        int[] arr1 = {2, 5, 8, 9, 12, 16, 19, 20, 23, 25, 27, 35};
 //        Arrays.stream(arr1)

@@ -39,24 +39,24 @@ public class SimpleRepository {
         int k = log2(length, RoundingMode.DOWN), i = (int) pow(2, k) - 1;
 
         IndexBlock i1 = indexArea.readBlock(i);
-        Result r1 = i1.find(id);
+        Result result = i1.find(id);
 
-        if (r1.hasResult())
-            return Optional.of(r1.getValue());
+        if (result.hasResult())
+            return Optional.of(result.getValue());
 
-        if (r1.getIndicator() < 0)
-            return homogeneousBinarySearch(r1, length, i, k, id);
+        if (result.getIndicator() < 0)
+            return homogeneousBinarySearch(result, length, i, k, id);
 
         int l = log2(length - (int) pow(2, k), RoundingMode.DOWN);
         i = length - (int) pow(2, l);
 
         IndexBlock i2 = indexArea.readBlock(i);
-        Result r2 = i2.find(id);
+        result = i2.find(id);
 
-        if (r2.hasResult())
-            return Optional.of(r2.getValue());
+        if (result.hasResult())
+            return Optional.of(result.getValue());
 
-        return homogeneousBinarySearch(r1, length, i, l, id);
+        return homogeneousBinarySearch(result, length, i, l, id);
     }
 
     public Optional<IndexRecord> homogeneousBinarySearch(Result result, int length, int i, int p, int id) {
@@ -71,10 +71,10 @@ public class SimpleRepository {
                 return Optional.empty();
 
             IndexBlock indexBlock = indexArea.readBlock(i);
-            Result result1 = indexBlock.find(id);
+            result = indexBlock.find(id);
 
-            if (result1.hasResult())
-                return Optional.of(result1.getValue());
+            if (result.hasResult())
+                return Optional.of(result.getValue());
         }
 
         return Optional.empty();
@@ -97,7 +97,7 @@ public class SimpleRepository {
         } else {
             long ptr = globalArea.write(datumRecord);
             IndexRecord indexRecord = new IndexRecord(datumRecord.getId(), ptr);
-            long numberOfBlocks = indexArea.countNumberOfBlocks();
+            int numberOfBlocks = indexArea.countNumberOfBlocks();
 
             int blockIdx = 0;
             IndexBlock indexBlock = null;
@@ -120,18 +120,18 @@ public class SimpleRepository {
                 if (currIdx == numberOfBlocks - 1) {
                     IndexBlock newOne = new IndexBlock(0, new ArrayList<>());
                     isOvercrowded = newOne.addRecord(last);
-                    indexArea.write(curr, (long) currIdx * IndexBlock.BYTES);
+                    indexArea.write(curr, currIdx);
                     curr = newOne;
                     currIdx++;
                 } else {
                     IndexBlock next = indexArea.readBlock(currIdx + 1);
                     isOvercrowded = next.addRecord(last);
-                    indexArea.write(curr, (long) currIdx * IndexBlock.BYTES);
+                    indexArea.write(curr, currIdx);
                     curr = next;
                     currIdx++;
                 }
             }
-            indexArea.write(curr, (long) currIdx * IndexBlock.BYTES);
+            indexArea.write(curr, currIdx);
         }
     }
 }
