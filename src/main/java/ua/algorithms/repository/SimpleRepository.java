@@ -16,47 +16,9 @@ public class SimpleRepository {
         this.indexArea = indexArea;
         this.globalArea = globalArea;
     }
-    public void update(long id, String newValue) {
-        long numberOfBlocks = indexArea.countNumberOfBlocks();
-        for (int i = 0; i < numberOfBlocks; i++) {
-            IndexBlock indexBlock = indexArea.readBlock((long) i * IndexBlock.BYTES);
-            List<IndexRecord> records = indexBlock.getRecords();
-            long offset = binarySearch(records, 0, records.size() - 1, id);
-            if (offset != -1) {
-                DatumRecord update = globalArea.read(offset);
-                update.setValue(newValue);
-                globalArea.update(update, offset);
-            }
-        }
-    }
 
     public DatumRecord find(long id) {
-        long numberOfBlocks = indexArea.countNumberOfBlocks();
-        for (int i = 0; i < numberOfBlocks; i++) {
-            IndexBlock indexBlock = indexArea.readBlock((long) i * IndexBlock.BYTES);
-            List<IndexRecord> records = indexBlock.getRecords();
-            long offset = binarySearch(records, 0, records.size() - 1, id);
-            if (offset != -1)
-                return globalArea.read(offset);
-        }
-        return null;
-    }
-
-    long binarySearch(List<IndexRecord> records, int l, int r, long pk)
-    {
-        if (r >= l) {
-            int mid = l + (r - l) / 2;
-
-            if (records.get(mid).getPk() == pk)
-                return records.get(mid).getPtr();
-
-            if (records.get(mid).getPk() > pk)
-                return binarySearch(records, l, mid - 1, pk);
-
-            return binarySearch(records, mid + 1, r, pk);
-        }
-
-        return -1;
+        throw new RuntimeException("Method is not implemented");
     }
 
     public void addDatumRecord(DatumRecord datumRecord) {
