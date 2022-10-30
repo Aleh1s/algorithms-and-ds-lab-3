@@ -1,16 +1,8 @@
 package ua.algorithms;
 
-import com.google.common.math.LongMath;
-import ua.algorithms.accessor.FileAccessor;
-import ua.algorithms.accessor.GlobalFileAccessor;
-import ua.algorithms.accessor.IndexFileAccessor;
-import ua.algorithms.repository.SimpleRepository;
-import ua.algorithms.structure.DatumRecord;
-
 import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import static com.google.common.math.LongMath.*;
 import static java.lang.Math.pow;
@@ -36,63 +28,60 @@ public class Main {
 //                .forEach(i -> System.out.println(i + " - " + search(arr1, i)));
 //        IntStream.of(-1, 0, 1, 36, 100, 200)
 //                .forEach(i -> System.out.println(i + " - " + search(arr1, i)));
-
-        for (int i = 0; i < 1000; i++) {
+//
+        for (int i = 0; i < 10_000; i++) {
             int[] ints = IntStream.range(0, i).toArray();
             Arrays.stream(ints)
                     .forEach(j -> {
                         int search = search(ints, j);
+
                         if (j != search)
                             System.err.println("size - " + ints.length + ", search - " + search + ", j - " + j);
+
                     });
         }
 
     }
 
     public static int search(int[] arr, int search) {
-        int k = log2(arr.length, RoundingMode.DOWN);
-        int i = (int) pow(2, k) - 1;
+        int k = log2(arr.length, RoundingMode.DOWN), i = (int) pow(2, k) - 1;
 
         if (search == arr[i])
             return i;
 
-        if (search < arr[i]) {
-            return homogeneousBinarySearch(i, search, arr, k);
-        } else {
-            int l = log2((long) (arr.length - pow(2, k) + 1), RoundingMode.DOWN);
-            i = arr.length + 1 - (int) pow(2, l);
+        if (search < arr[i])
+            return homogeneousBinarySearch(arr, i, search, k);
 
-            if (search == arr[i])
-                return i;
+        int l = log2(arr.length - (int) pow(2, k), RoundingMode.DOWN);
+        i = arr.length - (int) pow(2, l);
 
-            return homogeneousBinarySearch(i, search, arr, l);
-        }
+        if (search == arr[i])
+            return i;
+
+        return homogeneousBinarySearch(arr, i, search, k);
     }
 
-    public static int homogeneousBinarySearch(int i, int search, int[] arr, int p) {
-        int j = 1, n = countN(p, j++);
-        boolean end = false;
-        do {
-            if (n == 0)
-                end = true;
-
-            i = countI(search, arr[i], i, n);
-            n = countN(p, j++);
+    public static int homogeneousBinarySearch(int[] arr, int i, int search, int p) {
+        int j = 1;
+        for (int n = countN(p, j++); n >= 0; n = countN(p, j++)) {
+            if (i >= arr.length)
+                i = countI(search, search + 1, i, n);
+            else
+                i = countI(search, arr[i], i, n);
 
             if (i < arr.length && search == arr[i])
                 return i;
+        }
 
-        } while (!end);
         return -1;
     }
 
-    public static int countI(int search, int K, int i, int n) {
-        return search < K ? i - ((n / 2) + 1) : i + ((n / 2) + 1);
+    public static int countI(int search, int curr, int i, int n) {
+        return search < curr ? i - ((n / 2) + 1) : i + ((n / 2) + 1);
     }
 
     public static int countN(int p, int j) {
         return (int) pow(2, p - j);
     }
-
-
+    
 }
