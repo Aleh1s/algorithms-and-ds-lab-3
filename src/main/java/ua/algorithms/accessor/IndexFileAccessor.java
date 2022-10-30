@@ -22,7 +22,7 @@ public class IndexFileAccessor extends FileAccessor {
         return IndexBlockSerializer.deserialize(read(BYTES));
     }
 
-    public long countNumberOfBlocks() {
-        return getSizeOfFile() / BYTES;
+    public int countNumberOfBlocks() {
+        return (int) getSizeOfFile() / BYTES;
     }
 }

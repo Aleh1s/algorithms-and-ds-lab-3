@@ -2,6 +2,7 @@ package ua.algorithms.structure;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import ua.algorithms.util.Result;
 
 import java.util.List;
 import java.util.Objects;
@@ -10,32 +11,6 @@ import java.util.Optional;
 @Getter
 @AllArgsConstructor
 public class IndexBlock {
-
-    public static class Result {
-        private IndexRecord value;
-        private int indicator;
-
-        private Result(IndexRecord value, int indicator) {
-            this.value = value;
-            this.indicator = indicator;
-        }
-
-        public static Result of(IndexRecord value, int indicator) {
-            return new Result(value, indicator);
-        }
-
-        public boolean hasResult() {
-            return Objects.nonNull(value);
-        }
-
-        public IndexRecord getValue() {
-            return value;
-        }
-
-        public int getIndicator() {
-            return indicator;
-        }
-    }
 
     private int size; // curr size of data in block
     private List<IndexRecord> records;
