@@ -24,10 +24,15 @@ public class SimpleRepository {
         this.globalArea = globalArea;
     }
 
-    public DatumRecord find(int id) {
-        IndexRecord indexRecord = search(id)
-                .orElseThrow(() -> new RuntimeException("Element doesn't exist"));
-        return globalArea.read(indexRecord.getPtr());
+    public Optional<DatumRecord> find(int id) {
+        Optional<IndexRecord> indexRecordOptional = search(id);
+
+        if (indexRecordOptional.isPresent()) {
+            IndexRecord indexRecord = indexRecordOptional.get();
+            return Optional.of(globalArea.read(indexRecord.getPtr()));
+        }
+
+        return Optional.empty();
     }
 
     public Optional<IndexRecord> search(int id) {
@@ -62,6 +67,9 @@ public class SimpleRepository {
                 i = countI(-1, i, n);
             else
                 i = countI(result.getIndicator(), i, n);
+
+            if (n == 0 && (i < 0 || i >= length))
+                return Optional.empty();
 
             IndexBlock indexBlock = indexArea.readBlock(i);
             Result result1 = indexBlock.find(id);

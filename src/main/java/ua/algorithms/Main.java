@@ -5,9 +5,11 @@ import ua.algorithms.accessor.GlobalFileAccessor;
 import ua.algorithms.accessor.IndexFileAccessor;
 import ua.algorithms.repository.SimpleRepository;
 import ua.algorithms.structure.DatumRecord;
+import ua.algorithms.structure.IndexBlock;
 
 import java.math.RoundingMode;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 import static com.google.common.math.LongMath.*;
@@ -26,8 +28,8 @@ public class Main {
                 globalFileAccessor
         );
 
-        DatumRecord datumRecord = simpleRepository.find(100);
-        System.out.println(datumRecord);
+        Optional<DatumRecord> datumRecord = simpleRepository.find(23452);
+        datumRecord.ifPresent(System.out::println);
 
 //        int[] arr1 = {2, 5, 8, 9, 12, 16, 19, 20, 23, 25, 27, 35};
 //        Arrays.stream(arr1)
@@ -41,13 +43,20 @@ public class Main {
 //                    .forEach(j -> {
 //                        int search = search(ints, j);
 //
-//                        if (j == search) {
-//                            System.out.println(true);
-//                        } else
-//                            System.err.println("size - " + ints.length + ", search - " + search + ", j - " + j);
-//
+//                        if (j != search)
+//                            throw new IllegalArgumentException(ints.length + ", find: " + j + ", actual: " + search);
 //                    });
 //        }
+
+//        int[] ints = IntStream.range(0, 16).toArray();
+//        int search = search(ints, 0);
+//        System.out.println(search);
+
+//
+//        int[] arr = {2, 5, 8, 9, 12, 16, 19, 20, 23, 25, 27, 35};
+//        System.out.println(search(arr, 2));
+//        System.out.println(search(arr, 20));
+//        System.out.println(search(arr, 35));
     }
 
     public static int search(int[] arr, int search) {
@@ -75,6 +84,9 @@ public class Main {
                 i = countI(search, search + 1, i, n);
             else
                 i = countI(search, arr[i], i, n);
+
+            if (n == 0 && (i < 0 || i >= arr.length))
+                return -1;
 
             if (i < arr.length && search == arr[i])
                 return i;
