@@ -5,7 +5,6 @@ import ua.algorithms.accessor.IndexFileAccessor;
 import ua.algorithms.structure.DatumRecord;
 import ua.algorithms.structure.IndexBlock;
 import ua.algorithms.structure.IndexRecord;
-import ua.algorithms.util.Result;
 
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -24,57 +23,60 @@ public class SimpleRepository {
     }
 
     public Optional<DatumRecord> findById(int id) {
-        Optional<IndexRecord> indexRecordOptional = search(id);
+        Optional<IndexBlock> indexRecordOptional = search(id);
 
         if (indexRecordOptional.isPresent()) {
-            IndexRecord indexRecord = indexRecordOptional.get();
-            return Optional.of(globalArea.read(indexRecord.getPtr()));
+            IndexBlock indexBlock = indexRecordOptional.get();
+            Optional<IndexRecord> optionalIndexRecord = indexBlock.findById(id);
+
+            if (optionalIndexRecord.isPresent())
+                return Optional.of(globalArea.read(optionalIndexRecord.get().getPtr()));
         }
 
         return Optional.empty();
     }
 
-    public Optional<IndexRecord> search(int id) {
+    public Optional<IndexBlock> search(int id) {
         int length = indexArea.countNumberOfBlocks();
         int k = log2(length, RoundingMode.DOWN), i = (int) pow(2, k) - 1;
 
-        IndexBlock i1 = indexArea.readBlock(i);
-        Result result = i1.find(id);
+        IndexBlock indexBlock = indexArea.readBlock(i);
+        int indicator = indexBlock.calculateIndicator(id);
 
-        if (result.hasResult())
-            return Optional.of(result.getValue());
+        if (indicator == 0)
+            return Optional.of(indexBlock);
 
-        if (result.getIndicator() < 0)
-            return homogeneousBinarySearch(result, length, i, k, id);
+        if (indicator < 0)
+            return homogeneousBinarySearch(indicator, length, i, k, id);
 
         int l = log2(length - (int) pow(2, k), RoundingMode.DOWN);
         i = length - (int) pow(2, l);
 
-        IndexBlock i2 = indexArea.readBlock(i);
-        result = i2.find(id);
+        indexBlock = indexArea.readBlock(i);
+        indicator = indexBlock.calculateIndicator(id);
 
-        if (result.hasResult())
-            return Optional.of(result.getValue());
+        if (indicator == 0)
+            return Optional.of(indexBlock);
 
-        return homogeneousBinarySearch(result, length, i, l, id);
+        return homogeneousBinarySearch(indicator, length, i, l, id);
     }
 
-    public Optional<IndexRecord> homogeneousBinarySearch(Result result, int length, int i, int p, int id) {
+    public Optional<IndexBlock> homogeneousBinarySearch(int indicator, int length, int i, int p, int id) {
         int j = 1;
         for (int n = countN(p, j++); n >= 0; n = countN(p, j++)) {
             if (i >= length)
                 i = countI(-1, i, n);
             else
-                i = countI(result.getIndicator(), i, n);
+                i = countI(indicator, i, n);
 
             if (n == 0 && (i < 0 || i >= length))
                 return Optional.empty();
 
             IndexBlock indexBlock = indexArea.readBlock(i);
-            result = indexBlock.find(id);
+            indicator = indexBlock.calculateIndicator(id);
 
-            if (result.hasResult())
-                return Optional.of(result.getValue());
+            if (indicator == 0)
+                return Optional.of(indexBlock);
         }
 
         return Optional.empty();
