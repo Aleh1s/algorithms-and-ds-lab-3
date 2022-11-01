@@ -18,6 +18,7 @@ import static java.lang.Math.pow;
 public class SimpleRepository {
     private final IndexFileAccessor indexArea;
     private final GlobalFileAccessor globalArea;
+
     public SimpleRepository(IndexFileAccessor indexArea, GlobalFileAccessor globalArea) {
         this.indexArea = indexArea;
         this.globalArea = globalArea;
@@ -41,8 +42,7 @@ public class SimpleRepository {
         if (globalArea.isEmpty()) {
             addFirst(datumRecord);
         } else {
-            long ptr = globalArea.write(datumRecord);
-            IndexRecord indexRecord = new IndexRecord(datumRecord.getId(), ptr);
+            IndexRecord indexRecord = writeNewDatumRecord(datumRecord);
             int numberOfBlocks = indexArea.countNumberOfBlocks();
 
             IndexBlock indexBlock = searchIndexBlock((int) datumRecord.getId())
@@ -53,33 +53,40 @@ public class SimpleRepository {
 
             boolean isOvercrowded = indexBlock.addRecord(indexRecord);
 
-            int currNumber = indexBlock.getNumber();
-            IndexBlock curr = indexBlock;
-            while (isOvercrowded) {
-                IndexRecord last = curr.retrieveAndRemoveLast();
-                if (currNumber == numberOfBlocks - 1) {
-                    IndexBlock newOne = new IndexBlock(numberOfBlocks, 0, new ArrayList<>());
-                    isOvercrowded = newOne.addRecord(last);
-                    indexArea.write(curr, currNumber);
-                    curr = newOne;
-                    currNumber++;
-                } else {
-                    IndexBlock next = indexArea.readBlock(currNumber + 1);
-                    isOvercrowded = next.addRecord(last);
-                    indexArea.write(curr, currNumber);
-                    curr = next;
-                    currNumber++;
-                }
-            }
-            indexArea.write(curr, currNumber);
+            if (isOvercrowded)
+                reconstructIndexArea(indexBlock, numberOfBlocks);
         }
     }
 
+    private void reconstructIndexArea(IndexBlock curr, int numberOfBlocks) {
+        int currNumber = curr.getNumber();
+        IndexBlock next;
+        boolean isOvercrowded = true;
+        while (isOvercrowded) {
+            IndexRecord last = curr.retrieveAndRemoveLast();
+
+            if (currNumber == numberOfBlocks - 1)
+                next = new IndexBlock(numberOfBlocks, 0, new ArrayList<>());
+            else
+                next = indexArea.readBlock(currNumber + 1);
+
+            isOvercrowded = next.addRecord(last);
+            indexArea.write(curr, currNumber++);
+            curr = next;
+        }
+
+        indexArea.write(curr, currNumber);
+    }
+
     private void addFirst(DatumRecord datumRecord) {
-        long ptr = globalArea.write(datumRecord);
-        IndexRecord indexRecord = new IndexRecord(datumRecord.getId(), ptr);
+        IndexRecord indexRecord = writeNewDatumRecord(datumRecord);
         IndexBlock indexBlock = new IndexBlock(0, 1, List.of(indexRecord));
         indexArea.write(indexBlock, 0);
+    }
+
+    private IndexRecord writeNewDatumRecord(DatumRecord datumRecord) {
+        long ptr = globalArea.write(datumRecord);
+        return new IndexRecord(datumRecord.getId(), ptr);
     }
 
     public Optional<IndexBlock> searchIndexBlock(int id) {
