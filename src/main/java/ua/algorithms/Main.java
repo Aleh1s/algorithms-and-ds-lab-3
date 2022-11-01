@@ -43,11 +43,18 @@ public class Main {
                         simpleRepository.addDatumRecord(dr);
                 });
 
-        IntStream.range(0, 10_000)
-                .forEach(i -> {
-                    Optional<DatumRecord> d1 = simpleRepository.findById(i);
-                    d1.ifPresentOrElse(System.out::println, () -> System.out.println(i + " - does not exist"));
-                });
+        simpleRepository.findById(0).ifPresentOrElse(System.out::println, () -> System.out.println("Does not exist"));
+        simpleRepository.findById(9_999).ifPresentOrElse(System.out::println, () -> System.out.println("Does not exist"));
+        simpleRepository.findById(5_000).ifPresentOrElse(System.out::println, () -> System.out.println("Does not exist"));
+        simpleRepository.findById(-1).ifPresentOrElse(System.out::println, () -> System.out.println("Does not exist"));
+        simpleRepository.findById(10_000).ifPresentOrElse(System.out::println, () -> System.out.println("Does not exist"));
+
+
+//        IntStream.range(0, 10_000)
+//                .forEach(i -> {
+//                    Optional<DatumRecord> d1 = simpleRepository.findById(i);
+//                    d1.ifPresentOrElse(System.out::println, () -> System.out.println(i + " - does not exist"));
+//                });
 
 //        int[] arr1 = {2, 5, 8, 9, 12, 16, 19, 20, 23, 25, 27, 35};
 //        Arrays.stream(arr1)

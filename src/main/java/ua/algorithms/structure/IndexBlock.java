@@ -2,8 +2,9 @@ package ua.algorithms.structure;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import ua.algorithms.util.Result;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,34 +44,36 @@ public class IndexBlock {
         return temp;
     }
 
-    public Result find(long id) {
-        //
-        if (records.isEmpty())
-            return Result.of(null, 0);
-        //
+    public Optional<IndexRecord> findById(int id) {
+        int i = Collections
+                .binarySearch(records, new IndexRecord(id, 0), Comparator.comparing(IndexRecord::getPk));
 
+        if (i >= 0)
+            return Optional.of(records.get(i));
+
+        return Optional.empty();
+    }
+
+    public int calculateIndicator(int id) {
         IndexRecord first = records.get(0);
         if (records.size() == 1) {
             if (id == first.getPk())
-                return Result.of(first, 0);
+                return 0;
 
             if (id < first.getPk())
-                return Result.of(null, -1);
+                return -1;
 
-            return Result.of(null, 1);
+            return 1;
         }
 
-        Optional<IndexRecord> find = records.stream()
-                .filter(indexRecord -> indexRecord.getPk() == id)
-                .findFirst();
-
-        if (find.isPresent())
-            return Result.of(find.get(), 0);
+        IndexRecord last = records.get(records.size() - 1);
+        if (id >= first.getPk() && id <= last.getPk())
+            return 0;
 
         if (id < first.getPk())
-            return Result.of(null, -1);
+            return -1;
 
-        return Result.of(null, 1);
+        return 1;
     }
 
     @Override
