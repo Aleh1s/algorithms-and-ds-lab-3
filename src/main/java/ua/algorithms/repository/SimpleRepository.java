@@ -38,7 +38,7 @@ public class SimpleRepository {
         return Optional.empty();
     }
 
-    public void addDatumRecord(DatumRecord datumRecord) throws RecordAlreadyExistsException {
+    public int addDatumRecord(DatumRecord datumRecord) throws RecordAlreadyExistsException {
         if (globalArea.isEmpty()) {
             addFirst(datumRecord);
         } else {
@@ -58,6 +58,26 @@ public class SimpleRepository {
 
             indexArea.write(indexBlock, indexBlock.getNumber());
         }
+
+        return 1;
+    }
+
+    public int update(int id, String value) {
+        Optional<IndexBlock> optionalIndexBlock = searchIndexBlock(id);
+
+        if (optionalIndexBlock.isPresent()) {
+            IndexBlock indexBlock = optionalIndexBlock.get();
+            Optional<IndexRecord> optionalIndexRecord = indexBlock.findById(id);
+            if (optionalIndexRecord.isPresent()) {
+                IndexRecord indexRecord = optionalIndexRecord.get();
+                DatumRecord datumRecord = globalArea.read(indexRecord.getPtr());
+                datumRecord.setValue(value);
+                globalArea.update(datumRecord, indexRecord.getPtr());
+                return 1;
+            }
+        }
+
+        return 0;
     }
 
     private IndexBlock reconstructIndexArea(IndexBlock curr, int numberOfBlocks) {

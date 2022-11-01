@@ -54,23 +54,30 @@ public class Main {
                     }
                 });
 
-        IntStream.range(0, 10_000)
+        IntStream.of(0, 9_999, 5_000, -1, 10_000)
+                        .forEach(i -> {
+                            int updated = simpleRepository.update(i, "Updated");
+                            System.out.println(updated);
+                        });
+
+        IntStream.of(0, 9_999, 5_000, -1, 10_000)
                 .forEach(i -> {
                     Optional<DatumRecord> d1 = simpleRepository.findDatumRecordById(i);
                     d1.ifPresentOrElse(System.out::println, () -> System.err.println(i + " - does not exist"));
                 });
 
-        IntStream intStream = IntStream.of(10_000, 20_000, 30_000, -10_000, -20_000, -30_000);
-        intStream.forEach(i -> {
-            Optional<DatumRecord> d1 = simpleRepository.findDatumRecordById(i);
-            d1.ifPresentOrElse(System.out::println, () -> System.err.println(i + " - does not exist"));
-        });
 
-        try {
-            simpleRepository.addDatumRecord(new DatumRecord(100, ""));
-        } catch (RecordAlreadyExistsException e) {
-            throw new RuntimeException(e);
-        }
+//        IntStream.range(0, 10_000)
+//                .forEach(i -> {
+//                    Optional<DatumRecord> d1 = simpleRepository.findDatumRecordById(i);
+//                    d1.ifPresentOrElse(System.out::println, () -> System.err.println(i + " - does not exist"));
+//                });
+//
+//        IntStream intStream = IntStream.of(10_000, 20_000, 30_000, -10_000, -20_000, -30_000);
+//        intStream.forEach(i -> {
+//            Optional<DatumRecord> d1 = simpleRepository.findDatumRecordById(i);
+//            d1.ifPresentOrElse(System.out::println, () -> System.err.println(i + " - does not exist"));
+//        });
 
 
 
