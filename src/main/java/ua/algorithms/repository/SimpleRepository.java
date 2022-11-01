@@ -22,8 +22,8 @@ public class SimpleRepository {
         this.globalArea = globalArea;
     }
 
-    public Optional<DatumRecord> findById(int id) {
-        Optional<IndexBlock> indexRecordOptional = search(id);
+    public Optional<DatumRecord> findDatumRecordById(int id) {
+        Optional<IndexBlock> indexRecordOptional = searchIndexBlock(id);
 
         if (indexRecordOptional.isPresent()) {
             IndexBlock indexBlock = indexRecordOptional.get();
@@ -36,7 +36,7 @@ public class SimpleRepository {
         return Optional.empty();
     }
 
-    public Optional<IndexBlock> search(int id) {
+    public Optional<IndexBlock> searchIndexBlock(int id) {
         int length = indexArea.countNumberOfBlocks();
         int k = log2(length, RoundingMode.DOWN), i = (int) pow(2, k) - 1;
 
@@ -61,7 +61,7 @@ public class SimpleRepository {
         return homogeneousBinarySearch(indicator, length, i, l, id);
     }
 
-    public Optional<IndexBlock> homogeneousBinarySearch(int indicator, int length, int i, int p, int id) {
+    private Optional<IndexBlock> homogeneousBinarySearch(int indicator, int length, int i, int p, int id) {
         int j = 1;
         for (int n = countN(p, j++); n >= 0; n = countN(p, j++)) {
             if (i >= length)
@@ -82,35 +82,37 @@ public class SimpleRepository {
         return Optional.empty();
     }
 
-    public static int countI(int indicator, int i, int n) {
+    private static int countI(int indicator, int i, int n) {
         return indicator < 0 ? i - ((n / 2) + 1) : i + ((n / 2) + 1);
     }
 
-    public static int countN(int p, int j) {
+    private static int countN(int p, int j) {
         return (int) pow(2, p - j);
     }
 
     public void addDatumRecord(DatumRecord datumRecord) {
         if (globalArea.isEmpty()) {
-            long ptr = globalArea.write(datumRecord);
-            IndexRecord indexRecord = new IndexRecord(datumRecord.getId(), ptr);
-            IndexBlock indexBlock = new IndexBlock(1, List.of(indexRecord));
-            indexArea.write(indexBlock, 0);
+            addFirst(datumRecord);
         } else {
             long ptr = globalArea.write(datumRecord);
             IndexRecord indexRecord = new IndexRecord(datumRecord.getId(), ptr);
             int numberOfBlocks = indexArea.countNumberOfBlocks();
 
-            int blockIdx = 0;
-            IndexBlock indexBlock = null;
-            for (; blockIdx < numberOfBlocks; blockIdx++) {
-                IndexBlock temp = indexArea.readBlock(blockIdx);
-                List<IndexRecord> records = temp.getRecords();
-                if (datumRecord.getId() < records.get(records.size() - 1).getPk() || blockIdx == numberOfBlocks - 1) {
-                    indexBlock = temp;
-                    break;
-                }
-            }
+            IndexBlock indexBlock = searchIndexBlock((int) datumRecord.getId())
+                    .orElseGet(() -> indexArea.readBlock(numberOfBlocks - 1));
+
+            //todo:
+
+//            int blockIdx = 0;
+//            IndexBlock indexBlock = null;
+//            for (; blockIdx < numberOfBlocks; blockIdx++) {
+//                IndexBlock temp = indexArea.readBlock(blockIdx);
+//                List<IndexRecord> records = temp.getRecords();
+//                if (datumRecord.getId() < records.get(records.size() - 1).getPk() || blockIdx == numberOfBlocks - 1) {
+//                    indexBlock = temp;
+//                    break;
+//                }
+//            }
 
             assert indexBlock != null;
             boolean isOvercrowded = indexBlock.addRecord(indexRecord);
@@ -135,5 +137,12 @@ public class SimpleRepository {
             }
             indexArea.write(curr, currIdx);
         }
+    }
+
+    private void addFirst(DatumRecord datumRecord) {
+        long ptr = globalArea.write(datumRecord);
+        IndexRecord indexRecord = new IndexRecord(datumRecord.getId(), ptr);
+        IndexBlock indexBlock = new IndexBlock(1, List.of(indexRecord));
+        indexArea.write(indexBlock, 0);
     }
 }

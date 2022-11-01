@@ -7,7 +7,6 @@ import ua.algorithms.repository.SimpleRepository;
 import ua.algorithms.structure.DatumRecord;
 
 import java.math.RoundingMode;
-import java.util.Optional;
 import java.util.stream.IntStream;
 
 import static com.google.common.math.LongMath.*;
@@ -43,11 +42,11 @@ public class Main {
                         simpleRepository.addDatumRecord(dr);
                 });
 
-        simpleRepository.findById(0).ifPresentOrElse(System.out::println, () -> System.out.println("Does not exist"));
-        simpleRepository.findById(9_999).ifPresentOrElse(System.out::println, () -> System.out.println("Does not exist"));
-        simpleRepository.findById(5_000).ifPresentOrElse(System.out::println, () -> System.out.println("Does not exist"));
-        simpleRepository.findById(-1).ifPresentOrElse(System.out::println, () -> System.out.println("Does not exist"));
-        simpleRepository.findById(10_000).ifPresentOrElse(System.out::println, () -> System.out.println("Does not exist"));
+        simpleRepository.findDatumRecordById(0).ifPresentOrElse(System.out::println, () -> System.out.println("Does not exist"));
+        simpleRepository.findDatumRecordById(9_999).ifPresentOrElse(System.out::println, () -> System.out.println("Does not exist"));
+        simpleRepository.findDatumRecordById(5_000).ifPresentOrElse(System.out::println, () -> System.out.println("Does not exist"));
+        simpleRepository.findDatumRecordById(-1).ifPresentOrElse(System.out::println, () -> System.out.println("Does not exist"));
+        simpleRepository.findDatumRecordById(10_000).ifPresentOrElse(System.out::println, () -> System.out.println("Does not exist"));
 
 
 //        IntStream.range(0, 10_000)
