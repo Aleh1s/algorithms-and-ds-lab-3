@@ -58,9 +58,6 @@ public class IndexBlock {
     }
 
     public int calculateIndicator(int id) {
-        if (records.isEmpty())
-            return 0;
-
         IndexRecord first = records.get(0);
         if (records.size() == 1) {
             if (id == first.getPk())

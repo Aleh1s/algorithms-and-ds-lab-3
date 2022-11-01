@@ -7,6 +7,7 @@ import ua.algorithms.repository.SimpleRepository;
 import ua.algorithms.structure.DatumRecord;
 
 import java.math.RoundingMode;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 import static com.google.common.math.LongMath.*;
@@ -42,18 +43,17 @@ public class Main {
                         simpleRepository.addDatumRecord(dr);
                 });
 
-        simpleRepository.findDatumRecordById(0).ifPresentOrElse(System.out::println, () -> System.out.println("Does not exist"));
-        simpleRepository.findDatumRecordById(9_999).ifPresentOrElse(System.out::println, () -> System.out.println("Does not exist"));
-        simpleRepository.findDatumRecordById(5_000).ifPresentOrElse(System.out::println, () -> System.out.println("Does not exist"));
-        simpleRepository.findDatumRecordById(-1).ifPresentOrElse(System.out::println, () -> System.out.println("Does not exist"));
-        simpleRepository.findDatumRecordById(10_000).ifPresentOrElse(System.out::println, () -> System.out.println("Does not exist"));
+        IntStream.range(0, 10_000)
+                .forEach(i -> {
+                    Optional<DatumRecord> d1 = simpleRepository.findDatumRecordById(i);
+                    d1.ifPresentOrElse(System.out::println, () -> System.err.println(i + " - does not exist"));
+                });
 
-
-//        IntStream.range(0, 10_000)
-//                .forEach(i -> {
-//                    Optional<DatumRecord> d1 = simpleRepository.findById(i);
-//                    d1.ifPresentOrElse(System.out::println, () -> System.out.println(i + " - does not exist"));
-//                });
+        IntStream intStream = IntStream.of(10_000, 20_000, 30_000, -10_000, -20_000, -30_000);
+        intStream.forEach(i -> {
+            Optional<DatumRecord> d1 = simpleRepository.findDatumRecordById(i);
+            d1.ifPresentOrElse(System.out::println, () -> System.err.println(i + " - does not exist"));
+        });
 
 //        int[] arr1 = {2, 5, 8, 9, 12, 16, 19, 20, 23, 25, 27, 35};
 //        Arrays.stream(arr1)
@@ -126,5 +126,5 @@ public class Main {
     public static int countN(int p, int j) {
         return (int) pow(2, p - j);
     }
-    
+
 }

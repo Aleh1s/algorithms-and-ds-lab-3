@@ -5,8 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a622ef3d-6af8-4ca7-afc7-4235ba35ed0e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/repository/SimpleRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/repository/SimpleRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/serializer/IndexBlockSerializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/serializer/IndexBlockSerializer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/structure/IndexBlock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/structure/IndexBlock.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
