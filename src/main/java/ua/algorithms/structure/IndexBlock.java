@@ -3,10 +3,7 @@ package ua.algorithms.structure;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Getter
 @AllArgsConstructor
@@ -94,6 +91,14 @@ public class IndexBlock {
 //
 //        return 1;
 //    }
+
+    public IndexBlock separate() {
+        List<IndexRecord> partOfRecords = new ArrayList<>();
+        for (int i = records.size() / 2 - 1; i < records.size(); i++)
+            partOfRecords.add(retrieveAndRemoveLast());
+
+        return new IndexBlock(number + 1, partOfRecords.size(), partOfRecords);
+    }
 
     public boolean isEmpty() {
         return records.isEmpty();

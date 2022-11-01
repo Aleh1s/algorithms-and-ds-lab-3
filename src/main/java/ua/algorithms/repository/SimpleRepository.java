@@ -11,7 +11,6 @@ import ua.algorithms.structure.IndexBlock;
 import ua.algorithms.structure.IndexRecord;
 
 import java.math.RoundingMode;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,9 +56,10 @@ public class SimpleRepository {
             boolean isOvercrowded = indexBlock.addRecord(indexRecord);
 
             if (isOvercrowded)
-                indexBlock = reconstructIndexArea(indexBlock, numberOfBlocks);
+                reconstructIndexArea(indexBlock, numberOfBlocks);
+            else
+                indexArea.write(indexBlock, indexBlock.getNumber());
 
-            indexArea.write(indexBlock, indexBlock.getNumber());
         }
 
         return 1;
@@ -116,24 +116,30 @@ public class SimpleRepository {
         return 0;
     }
 
-    private IndexBlock reconstructIndexArea(IndexBlock curr, int numberOfBlocks) {
-        int currNumber = curr.getNumber();
-        IndexBlock next;
-        boolean isOvercrowded = true;
-        while (isOvercrowded) {
-            IndexRecord last = curr.retrieveAndRemoveLast();
+    private void reconstructIndexArea(IndexBlock curr, int numberOfBlocks) {
+        IndexBlock temp = curr.separate();
 
-            if (currNumber == numberOfBlocks - 1)
-                next = new IndexBlock(numberOfBlocks, 0, new ArrayList<>());
-            else
-                next = indexArea.readBlock(currNumber + 1);
-
-            isOvercrowded = next.addRecord(last);
-            indexArea.write(curr, currNumber++);
-            curr = next;
+        if (curr.getNumber() == numberOfBlocks - 1) {
+            indexArea.write(curr, curr.getNumber());
+            indexArea.write(temp, temp.getNumber());
+            return;
         }
 
-        return curr;
+        IndexBlock next = indexArea.readBlock(curr.getNumber() + 1);
+        while (true) {
+            if (next.getNumber() == numberOfBlocks - 1) {
+                temp.setNumber(next.getNumber());
+                indexArea.write(temp, next.getNumber());
+                next.setNumber(next.getNumber() + 1);
+                indexArea.write(next, next.getNumber());
+                return;
+            }
+
+            temp.setNumber(next.getNumber());
+            indexArea.write(temp, next.getNumber());
+            temp = next;
+            next = indexArea.readBlock(temp.getNumber() + 1);
+        }
     }
 
     private void addFirst(DatumRecord datumRecord) {

@@ -5,10 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a622ef3d-6af8-4ca7-afc7-4235ba35ed0e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/indicator/Indicator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/indicator/InsertIndicator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/indicator/SearchIndicator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/accessor/IndexFileAccessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/accessor/IndexFileAccessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/repository/SimpleRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/repository/SimpleRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/structure/IndexBlock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/structure/IndexBlock.java" afterDir="false" />
     </list>

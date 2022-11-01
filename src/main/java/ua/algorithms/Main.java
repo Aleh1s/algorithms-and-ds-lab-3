@@ -1,5 +1,6 @@
 package ua.algorithms;
 
+import lombok.SneakyThrows;
 import ua.algorithms.accessor.FileAccessor;
 import ua.algorithms.accessor.GlobalFileAccessor;
 import ua.algorithms.accessor.IndexFileAccessor;
@@ -8,6 +9,8 @@ import ua.algorithms.repository.SimpleRepository;
 import ua.algorithms.structure.DatumRecord;
 
 import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
@@ -16,6 +19,7 @@ import static java.lang.Math.pow;
 
 
 public class Main {
+    @SneakyThrows
     public static void main(String[] args) {
         IndexFileAccessor indexFileAccessor =
                 (IndexFileAccessor) FileAccessor.of("src/main/resources/index.bin", "INDEX");
@@ -30,12 +34,36 @@ public class Main {
         indexFileAccessor.clearFile();
         globalFileAccessor.clearFile();
 
+//        IntStream.range(1, 130)
+//                .forEach(i -> {
+//                    try {
+//                        simpleRepository.insert(new DatumRecord(i, "value%d".formatted(i)));
+//                    } catch (RecordAlreadyExistsException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                });
+//
+//        IntStream.range(64, 129)
+//                .forEach(i -> {
+//                    simpleRepository.delete(i);
+//                    simpleRepository.findById(i).ifPresentOrElse(System.out::println, () -> System.out.println("Removed"));
+//                });
+//
+//        simpleRepository.findById(129).ifPresentOrElse(System.out::println, () -> System.out.println("Removed"));
+//
+//        int i = indexFileAccessor.countNumberOfBlocks();
+//        System.out.println(i);
+//        long size = indexFileAccessor.getSizeOfFile();
+//        System.out.println(size);
+
         IntStream.range(0, 10_000)
                 .forEach(i -> {
                     DatumRecord dr = new DatumRecord(i, "value%d".formatted(i));
                     if (i % 2 == 0) {
                         try {
-                            simpleRepository.addDatumRecord(dr);
+                            if (i == 320)
+                                System.out.println();
+                            simpleRepository.insert(dr);
                         } catch (RecordAlreadyExistsException e) {
                             throw new RuntimeException(e);
                         }
@@ -47,38 +75,37 @@ public class Main {
                     DatumRecord dr = new DatumRecord(i, "value%d".formatted(i));
                     if (i % 2 != 0) {
                         try {
-                            simpleRepository.addDatumRecord(dr);
+                            simpleRepository.insert(dr);
                         } catch (RecordAlreadyExistsException e) {
                             throw new RuntimeException(e);
                         }
                     }
                 });
 
-        IntStream.of(0, 9_999, 5_000, -1, 10_000)
-                        .forEach(i -> {
-                            int updated = simpleRepository.update(i, "Updated");
-                            System.out.println(updated);
-                        });
-
-        IntStream.of(0, 9_999, 5_000, -1, 10_000)
-                .forEach(i -> {
-                    Optional<DatumRecord> d1 = simpleRepository.findDatumRecordById(i);
-                    d1.ifPresentOrElse(System.out::println, () -> System.err.println(i + " - does not exist"));
-                });
-
-
-//        IntStream.range(0, 10_000)
+//        IntStream.of(0, 9_999, 5_000, -1, 10_000)
+//                        .forEach(i -> {
+//                            int updated = simpleRepository.update(i, "Updated");
+//                            System.out.println(updated);
+//                        });
+//
+//        IntStream.of(0, 9_999, 5_000, -1, 10_000)
 //                .forEach(i -> {
-//                    Optional<DatumRecord> d1 = simpleRepository.findDatumRecordById(i);
+//                    Optional<DatumRecord> d1 = simpleRepository.findById(i);
 //                    d1.ifPresentOrElse(System.out::println, () -> System.err.println(i + " - does not exist"));
 //                });
+
+
+        IntStream.range(0, 10_000)
+                .forEach(i -> {
+                    Optional<DatumRecord> d1 = simpleRepository.findById(i);
+                    d1.ifPresentOrElse(System.out::println, () -> System.err.println(i + " - does not exist"));
+                });
 //
 //        IntStream intStream = IntStream.of(10_000, 20_000, 30_000, -10_000, -20_000, -30_000);
 //        intStream.forEach(i -> {
 //            Optional<DatumRecord> d1 = simpleRepository.findDatumRecordById(i);
 //            d1.ifPresentOrElse(System.out::println, () -> System.err.println(i + " - does not exist"));
 //        });
-
 
 
 //        int[] arr1 = {2, 5, 8, 9, 12, 16, 19, 20, 23, 25, 27, 35};
