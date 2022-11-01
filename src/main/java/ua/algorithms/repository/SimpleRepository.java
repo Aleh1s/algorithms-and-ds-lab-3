@@ -54,11 +54,13 @@ public class SimpleRepository {
             boolean isOvercrowded = indexBlock.addRecord(indexRecord);
 
             if (isOvercrowded)
-                reconstructIndexArea(indexBlock, numberOfBlocks);
+                indexBlock = reconstructIndexArea(indexBlock, numberOfBlocks);
+
+            indexArea.write(indexBlock, indexBlock.getNumber());
         }
     }
 
-    private void reconstructIndexArea(IndexBlock curr, int numberOfBlocks) {
+    private IndexBlock reconstructIndexArea(IndexBlock curr, int numberOfBlocks) {
         int currNumber = curr.getNumber();
         IndexBlock next;
         boolean isOvercrowded = true;
@@ -75,7 +77,7 @@ public class SimpleRepository {
             curr = next;
         }
 
-        indexArea.write(curr, currNumber);
+        return curr;
     }
 
     private void addFirst(DatumRecord datumRecord) {
