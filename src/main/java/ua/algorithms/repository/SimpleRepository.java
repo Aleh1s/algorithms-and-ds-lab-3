@@ -2,6 +2,7 @@ package ua.algorithms.repository;
 
 import ua.algorithms.accessor.GlobalFileAccessor;
 import ua.algorithms.accessor.IndexFileAccessor;
+import ua.algorithms.exception.RecordAlreadyExistsException;
 import ua.algorithms.structure.DatumRecord;
 import ua.algorithms.structure.IndexBlock;
 import ua.algorithms.structure.IndexRecord;
@@ -36,7 +37,7 @@ public class SimpleRepository {
         return Optional.empty();
     }
 
-    public void addDatumRecord(DatumRecord datumRecord) {
+    public void addDatumRecord(DatumRecord datumRecord) throws RecordAlreadyExistsException {
         if (globalArea.isEmpty()) {
             addFirst(datumRecord);
         } else {
@@ -46,6 +47,9 @@ public class SimpleRepository {
 
             IndexBlock indexBlock = searchIndexBlock((int) datumRecord.getId())
                     .orElseGet(() -> indexArea.readBlock(numberOfBlocks - 1));
+
+            if (indexBlock.findById((int) datumRecord.getId()).isPresent())
+                throw new RecordAlreadyExistsException("Record with id [%d] already exists".formatted(datumRecord.getId()));
 
             boolean isOvercrowded = indexBlock.addRecord(indexRecord);
 
