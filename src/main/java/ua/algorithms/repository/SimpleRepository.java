@@ -3,6 +3,9 @@ package ua.algorithms.repository;
 import ua.algorithms.accessor.GlobalFileAccessor;
 import ua.algorithms.accessor.IndexFileAccessor;
 import ua.algorithms.exception.RecordAlreadyExistsException;
+import ua.algorithms.indicator.Indicator;
+import ua.algorithms.indicator.InsertIndicator;
+import ua.algorithms.indicator.SearchIndicator;
 import ua.algorithms.structure.DatumRecord;
 import ua.algorithms.structure.IndexBlock;
 import ua.algorithms.structure.IndexRecord;
@@ -24,8 +27,8 @@ public class SimpleRepository {
         this.globalArea = globalArea;
     }
 
-    public Optional<DatumRecord> findDatumRecordById(int id) {
-        Optional<IndexBlock> indexRecordOptional = searchIndexBlock(id);
+    public Optional<DatumRecord> findById(int id) {
+        Optional<IndexBlock> indexRecordOptional = searchIndexBlock(id, new SearchIndicator());
 
         if (indexRecordOptional.isPresent()) {
             IndexBlock indexBlock = indexRecordOptional.get();
@@ -38,14 +41,14 @@ public class SimpleRepository {
         return Optional.empty();
     }
 
-    public int addDatumRecord(DatumRecord datumRecord) throws RecordAlreadyExistsException {
+    public int insert(DatumRecord datumRecord) throws RecordAlreadyExistsException {
         if (globalArea.isEmpty()) {
             addFirst(datumRecord);
         } else {
             IndexRecord indexRecord = writeNewDatumRecord(datumRecord);
             int numberOfBlocks = indexArea.countNumberOfBlocks();
 
-            IndexBlock indexBlock = searchIndexBlock((int) datumRecord.getId())
+            IndexBlock indexBlock = searchIndexBlock((int) datumRecord.getId(), new InsertIndicator())
                     .orElseGet(() -> indexArea.readBlock(numberOfBlocks - 1));
 
             if (indexBlock.findById((int) datumRecord.getId()).isPresent())
@@ -63,7 +66,7 @@ public class SimpleRepository {
     }
 
     public int update(int id, String value) {
-        Optional<IndexBlock> optionalIndexBlock = searchIndexBlock(id);
+        Optional<IndexBlock> optionalIndexBlock = searchIndexBlock(id, new SearchIndicator());
 
         if (optionalIndexBlock.isPresent()) {
             IndexBlock indexBlock = optionalIndexBlock.get();
@@ -74,6 +77,39 @@ public class SimpleRepository {
                 datumRecord.setValue(value);
                 globalArea.update(datumRecord, indexRecord.getPtr());
                 return 1;
+            }
+        }
+
+        return 0;
+    }
+
+    public int delete(int id) {
+        Optional<IndexBlock> optionalIndexBlock = searchIndexBlock(id, new SearchIndicator());
+
+        if (optionalIndexBlock.isPresent()) {
+            IndexBlock curr = optionalIndexBlock.get();
+            int number = curr.delete(id);
+
+            if (curr.isEmpty()) {
+                int numberOfBlocks = indexArea.countNumberOfBlocks();
+
+                IndexBlock next;
+                while (true) {
+                    if (curr.getNumber() == numberOfBlocks - 1) {
+                        indexArea.setLength(indexArea.getSizeOfFile() - IndexBlock.BYTES);
+                        return number;
+                    }
+
+                    next = indexArea.readBlock(curr.getNumber() + 1);
+                    next.setNumber(curr.getNumber());
+                    indexArea.write(next, curr.getNumber());
+                    curr = next;
+                }
+            } else {
+                if (number > 0) {
+                    indexArea.write(curr, curr.getNumber());
+                    return number;
+                }
             }
         }
 
@@ -111,8 +147,11 @@ public class SimpleRepository {
         return new IndexRecord(datumRecord.getId(), ptr);
     }
 
-    public Optional<IndexBlock> searchIndexBlock(int id) {
+    public Optional<IndexBlock> searchIndexBlock(int id, Indicator indicator) {
         int length = indexArea.countNumberOfBlocks();
+
+        if (length == 0)
+            return Optional.empty();
 
         if (length == 1)
             return Optional.of(indexArea.readBlock(0));
@@ -120,13 +159,13 @@ public class SimpleRepository {
         int k = log2(length, RoundingMode.DOWN), i = (int) pow(2, k) - 1;
 
         IndexBlock indexBlock = indexArea.readBlock(i);
-        int indicator = indexBlock.calculateIndicator(id);
+        int ind = indicator.calculate(id, indexBlock);
 
-        if (indicator == 0)
+        if (ind == 0)
             return Optional.of(indexBlock);
 
-        if (indicator < 0)
-            return homogeneousBinarySearch(indicator, length, i, k, id);
+        if (ind < 0)
+            return homogeneousBinarySearch(indicator, ind, length, i, k, id);
 
         int expression = length - (int) pow(2, k);
         if (expression != 0) {
@@ -134,33 +173,36 @@ public class SimpleRepository {
             i = length - (int) pow(2, l);
 
             indexBlock = indexArea.readBlock(i);
-            indicator = indexBlock.calculateIndicator(id);
+            ind = indicator.calculate(id, indexBlock);
 
-            if (indicator == 0)
+            if (ind == 0)
                 return Optional.of(indexBlock);
 
-            return homogeneousBinarySearch(indicator, length, i, l, id);
+            return homogeneousBinarySearch(indicator, ind, length, i, l, id);
         }
 
         return Optional.empty();
     }
 
-    private Optional<IndexBlock> homogeneousBinarySearch(int indicator, int length, int i, int p, int id) {
+    private Optional<IndexBlock> homogeneousBinarySearch(Indicator indicator, int ind, int length, int i, int p, int id) {
         int j = 1;
         for (int n = countN(p, j++); n >= 0; n = countN(p, j++)) {
             if (i >= length)
                 i = countI(-1, i, n);
             else
-                i = countI(indicator, i, n);
+                i = countI(ind, i, n);
 
-            if (n == 0 && (i < 0 || i >= length))
-                return Optional.empty();
+//            if (n == 0 && (i < 0 || i >= length))
+//                return Optional.empty();
 
             IndexBlock indexBlock = indexArea.readBlock(i);
-            indicator = indexBlock.calculateIndicator(id);
+            ind = indicator.calculate(id, indexBlock);
 
-            if (indicator == 0)
+            if (ind == 0)
                 return Optional.of(indexBlock);
+
+            if (n == 0)
+                break;
         }
 
         return Optional.empty();

@@ -48,8 +48,7 @@ public class IndexBlock {
     }
 
     public Optional<IndexRecord> findById(int id) {
-        int i = Collections
-                .binarySearch(records, new IndexRecord(id, 0), Comparator.comparing(IndexRecord::getPk));
+        int i = find(id);
 
         if (i >= 0)
             return Optional.of(records.get(i));
@@ -57,26 +56,51 @@ public class IndexBlock {
         return Optional.empty();
     }
 
-    public int calculateIndicator(int id) {
-        IndexRecord first = records.get(0);
-        if (records.size() == 1) {
-            if (id == first.getPk())
-                return 0;
+    public int delete(int id) {
+        int i = find(id);
 
-            if (id < first.getPk())
-                return -1;
-
+        if (i >= 0) {
+            records.remove(i);
+            size--;
             return 1;
         }
 
-        IndexRecord last = records.get(records.size() - 1);
-        if (id >= first.getPk() && id <= last.getPk())
-            return 0;
+        return 0;
+    }
 
-        if (id < first.getPk())
-            return -1;
+    private int find(int id) {
+        return Collections.binarySearch(
+                records, new IndexRecord(id, 0), Comparator.comparing(IndexRecord::getPk));
+    }
 
-        return 1;
+//    public int calculateIndicator(int id) {
+//        IndexRecord first = records.get(0);
+//        if (records.size() == 1) {
+//            if (id == first.getPk())
+//                return 0;
+//
+//            if (id < first.getPk())
+//                return -1;
+//
+//            return 1;
+//        }
+//
+//        IndexRecord last = records.get(records.size() - 1);
+//        if (id >= first.getPk() && id <= last.getPk())
+//            return 0;
+//
+//        if (id < first.getPk())
+//            return -1;
+//
+//        return 1;
+//    }
+
+    public boolean isEmpty() {
+        return records.isEmpty();
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
     }
 
     @Override
