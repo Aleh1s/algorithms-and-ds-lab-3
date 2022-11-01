@@ -122,7 +122,7 @@ public class SimpleRepository {
             while (isOvercrowded) {
                 IndexRecord last = curr.retrieveAndRemoveLast();
                 if (currIdx == numberOfBlocks - 1) {
-                    IndexBlock newOne = new IndexBlock(0, new ArrayList<>());
+                    IndexBlock newOne = new IndexBlock(numberOfBlocks, 0, new ArrayList<>());
                     isOvercrowded = newOne.addRecord(last);
                     indexArea.write(curr, currIdx);
                     curr = newOne;
@@ -142,7 +142,7 @@ public class SimpleRepository {
     private void addFirst(DatumRecord datumRecord) {
         long ptr = globalArea.write(datumRecord);
         IndexRecord indexRecord = new IndexRecord(datumRecord.getId(), ptr);
-        IndexBlock indexBlock = new IndexBlock(1, List.of(indexRecord));
+        IndexBlock indexBlock = new IndexBlock(0, 1, List.of(indexRecord));
         indexArea.write(indexBlock, 0);
     }
 }

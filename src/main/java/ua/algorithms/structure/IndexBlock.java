@@ -12,13 +12,16 @@ import java.util.Optional;
 @AllArgsConstructor
 public class IndexBlock {
 
+    private int number;
     private int size; // curr size of data in block
     private List<IndexRecord> records;
-    public static final int SIZE_OFFSET = 0;
+    public static final int NUMBER_OFFSET = 0;
+    private static final int NUMBER_BYTES = Integer.BYTES;
+    public static final int SIZE_OFFSET = NUMBER_OFFSET + NUMBER_BYTES;
     public static final int SIZE_BYTES = Integer.BYTES;
     public static final int RECORDS_OFFSET = SIZE_OFFSET + SIZE_BYTES;
     public static final int RECORDS_BYTES = 1024;
-    public static final int BYTES = SIZE_BYTES + RECORDS_BYTES; // size of block in bytes
+    public static final int BYTES = NUMBER_BYTES + SIZE_BYTES + RECORDS_BYTES; // size of block in bytes
 
     public boolean addRecord(IndexRecord indexRecord) {
         if (records.isEmpty()) {
