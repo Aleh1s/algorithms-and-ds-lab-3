@@ -44,8 +44,10 @@ public class IndexBlock {
     }
 
     public Result find(long id) {
+        //
         if (records.isEmpty())
             return Result.of(null, 0);
+        //
 
         IndexRecord first = records.get(0);
         if (records.size() == 1) {
