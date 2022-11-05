@@ -9,7 +9,7 @@ import java.util.*;
 @AllArgsConstructor
 public class IndexBlock {
 
-    private int number;
+    private int index;
     private int size; // curr size of data in block
     private List<IndexRecord> records;
     public static final int NUMBER_OFFSET = 0;
@@ -101,15 +101,15 @@ public class IndexBlock {
             this.size--;
         }
 
-        return new IndexBlock(number + 1, partOfRecords.size(), partOfRecords);
+        return new IndexBlock(index + 1, partOfRecords.size(), partOfRecords);
     }
 
     public boolean isEmpty() {
         return records.isEmpty();
     }
 
-    public void setNumber(int number) {
-        this.number = number;
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     @Override

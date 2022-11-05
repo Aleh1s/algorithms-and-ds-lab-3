@@ -10,7 +10,7 @@ import java.util.List;
 public class IndexBlockSerializer {
     public static byte[] serialize(IndexBlock indexBlock) {
         ByteBuffer buffer = ByteBuffer.allocate(IndexBlock.BYTES)
-                .putInt(indexBlock.getNumber())
+                .putInt(indexBlock.getIndex())
                 .putInt(indexBlock.getSize());
         for (IndexRecord record : indexBlock.getRecords())
             buffer.put(IndexRecordSerializer.serialize(record));

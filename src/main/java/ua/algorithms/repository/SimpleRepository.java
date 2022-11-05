@@ -4,7 +4,6 @@ import ua.algorithms.accessor.GlobalFileAccessor;
 import ua.algorithms.accessor.IndexFileAccessor;
 import ua.algorithms.exception.RecordAlreadyExistsException;
 import ua.algorithms.indicator.Indicator;
-import ua.algorithms.indicator.InsertIndicator;
 import ua.algorithms.indicator.SearchIndicator;
 import ua.algorithms.structure.DatumRecord;
 import ua.algorithms.structure.IndexBlock;
@@ -27,14 +26,14 @@ public class SimpleRepository {
     }
 
     public Optional<DatumRecord> findById(int id) {
-        Optional<IndexBlock> indexRecordOptional = searchIndexBlock(id, new SearchIndicator());
+        Optional<IndexBlock> indexBlockOptional = searchIndexBlock(id, new SearchIndicator());
 
-        if (indexRecordOptional.isPresent()) {
-            IndexBlock indexBlock = indexRecordOptional.get();
-            Optional<IndexRecord> optionalIndexRecord = indexBlock.findById(id);
+        if (indexBlockOptional.isPresent()) {
+            IndexBlock indexBlock = indexBlockOptional.get();
+            Optional<IndexRecord> indexRecordOptional = indexBlock.findById(id);
 
-            if (optionalIndexRecord.isPresent())
-                return Optional.of(globalArea.read(optionalIndexRecord.get().getPtr()));
+            if (indexRecordOptional.isPresent())
+                return Optional.of(globalArea.read(indexRecordOptional.get().getPtr()));
         }
 
         return Optional.empty();
@@ -45,31 +44,29 @@ public class SimpleRepository {
             addFirst(datumRecord);
         } else {
             IndexRecord indexRecord = writeNewDatumRecord(datumRecord);
-            int numberOfBlocks = indexArea.countNumberOfBlocks();
-
-//            IndexBlock indexBlock = searchIndexBlock((int) datumRecord.getId(), new InsertIndicator())
-//                    .orElseGet(() -> indexArea.readBlock(numberOfBlocks - 1));
+            int numberOfIndexBlocks = indexArea.countNumberOfBlocks();
 
             int blockIdx = 0;
             IndexBlock indexBlock = null;
-            for (; blockIdx < numberOfBlocks; blockIdx++) {
+            for (; blockIdx < numberOfIndexBlocks; blockIdx++) {
                 IndexBlock temp = indexArea.readBlock(blockIdx);
                 List<IndexRecord> records = temp.getRecords();
-                if (datumRecord.getId() < records.get(records.size() - 1).getPk() || blockIdx == numberOfBlocks - 1) {
+                if (datumRecord.getId() < records.get(records.size() - 1).getPk() || blockIdx == numberOfIndexBlocks - 1) {
                     indexBlock = temp;
                     break;
                 }
             }
 
+            assert indexBlock != null;
             if (indexBlock.findById((int) datumRecord.getId()).isPresent())
                 throw new RecordAlreadyExistsException("Record with id [%d] already exists".formatted(datumRecord.getId()));
 
             boolean isOvercrowded = indexBlock.addRecord(indexRecord);
 
             if (isOvercrowded)
-                reconstructIndexArea(indexBlock, numberOfBlocks);
+                reconstructIndexArea(indexBlock, numberOfIndexBlocks);
             else
-                indexArea.write(indexBlock, indexBlock.getNumber());
+                indexArea.write(indexBlock, indexBlock.getIndex());
 
         }
 
@@ -106,19 +103,19 @@ public class SimpleRepository {
 
                 IndexBlock next;
                 while (true) {
-                    if (curr.getNumber() == numberOfBlocks - 1) {
+                    if (curr.getIndex() == numberOfBlocks - 1) {
                         indexArea.setLength(indexArea.getSizeOfFile() - IndexBlock.BYTES);
                         return number;
                     }
 
-                    next = indexArea.readBlock(curr.getNumber() + 1);
-                    next.setNumber(curr.getNumber());
-                    indexArea.write(next, curr.getNumber());
+                    next = indexArea.readBlock(curr.getIndex() + 1);
+                    next.setIndex(curr.getIndex());
+                    indexArea.write(next, curr.getIndex());
                     curr = next;
                 }
             } else {
                 if (number > 0) {
-                    indexArea.write(curr, curr.getNumber());
+                    indexArea.write(curr, curr.getIndex());
                     return number;
                 }
             }
@@ -130,33 +127,33 @@ public class SimpleRepository {
     private void reconstructIndexArea(IndexBlock curr, int numberOfBlocks) {
         IndexBlock temp = curr.separate();
 
-        if (curr.getNumber() == numberOfBlocks - 1) {
-            indexArea.write(curr, curr.getNumber());
-            indexArea.write(temp, temp.getNumber());
+        if (curr.getIndex() == numberOfBlocks - 1) {
+            indexArea.write(curr, curr.getIndex());
+            indexArea.write(temp, temp.getIndex());
             return;
         }
 
-        IndexBlock next = indexArea.readBlock(curr.getNumber() + 1);
+        IndexBlock next = indexArea.readBlock(curr.getIndex() + 1);
         while (true) {
-            if (next.getNumber() == numberOfBlocks - 1) {
-                temp.setNumber(next.getNumber());
-                indexArea.write(temp, next.getNumber());
-                next.setNumber(next.getNumber() + 1);
-                indexArea.write(next, next.getNumber());
+            if (next.getIndex() == numberOfBlocks - 1) {
+                temp.setIndex(next.getIndex());
+                indexArea.write(temp, next.getIndex());
+                next.setIndex(next.getIndex() + 1);
+                indexArea.write(next, next.getIndex());
                 return;
             }
 
-            temp.setNumber(next.getNumber());
-            indexArea.write(temp, next.getNumber());
+            temp.setIndex(next.getIndex());
+            indexArea.write(temp, next.getIndex());
             temp = next;
-            next = indexArea.readBlock(temp.getNumber() + 1);
+            next = indexArea.readBlock(temp.getIndex() + 1);
         }
     }
 
     private void addFirst(DatumRecord datumRecord) {
         IndexRecord indexRecord = writeNewDatumRecord(datumRecord);
         IndexBlock indexBlock = new IndexBlock(0, 1, List.of(indexRecord));
-        indexArea.write(indexBlock, 0);
+        indexArea.write(indexBlock, indexBlock.getIndex());
     }
 
     private IndexRecord writeNewDatumRecord(DatumRecord datumRecord) {
@@ -169,12 +166,6 @@ public class SimpleRepository {
 
         if (length == 0)
             return Optional.empty();
-
-//        if (length == 0)
-//            return Optional.empty();
-//
-//        if (length == 1)
-//            return Optional.of(indexArea.readBlock(0));
 
         int k = log2(length, RoundingMode.DOWN), i = (int) pow(2, k) - 1;
 
@@ -210,24 +201,5 @@ public class SimpleRepository {
         } while (step > 0);
 
         return Optional.empty();
-        //        int j = 1;
-//        for (int n = countN(p, j++); n >= 0; n = countN(p, j++)) {
-//            if (i >= length)
-//                i = countI(-1, i, n);
-//            else
-//                i = countI(ind, i, n);
-//
-////            if (n == 0 && (i < 0 || i >= length))
-////                return Optional.empty();
-//
-//            IndexBlock indexBlock = indexArea.readBlock(i);
-//            ind = indicator.calculate(id, indexBlock);
-//
-//            if (ind == 0)
-//                return Optional.of(indexBlock);
-//
-//            if (n == 0)
-//                break;
-//        }
     }
 }
