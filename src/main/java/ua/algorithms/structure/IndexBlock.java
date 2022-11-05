@@ -94,8 +94,12 @@ public class IndexBlock {
 
     public IndexBlock separate() {
         List<IndexRecord> partOfRecords = new ArrayList<>();
-        for (int i = records.size() / 2 - 1; i < records.size(); i++)
-            partOfRecords.add(retrieveAndRemoveLast());
+        int i = records.size() / 2;
+        for (int j = 0; j < i + 1; j++) {
+            partOfRecords.add(records.get(i));
+            records.remove(i);
+            this.size--;
+        }
 
         return new IndexBlock(number + 1, partOfRecords.size(), partOfRecords);
     }

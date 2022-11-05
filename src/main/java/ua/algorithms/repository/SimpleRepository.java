@@ -47,8 +47,19 @@ public class SimpleRepository {
             IndexRecord indexRecord = writeNewDatumRecord(datumRecord);
             int numberOfBlocks = indexArea.countNumberOfBlocks();
 
-            IndexBlock indexBlock = searchIndexBlock((int) datumRecord.getId(), new InsertIndicator())
-                    .orElseGet(() -> indexArea.readBlock(numberOfBlocks - 1));
+//            IndexBlock indexBlock = searchIndexBlock((int) datumRecord.getId(), new InsertIndicator())
+//                    .orElseGet(() -> indexArea.readBlock(numberOfBlocks - 1));
+
+            int blockIdx = 0;
+            IndexBlock indexBlock = null;
+            for (; blockIdx < numberOfBlocks; blockIdx++) {
+                IndexBlock temp = indexArea.readBlock(blockIdx);
+                List<IndexRecord> records = temp.getRecords();
+                if (datumRecord.getId() < records.get(records.size() - 1).getPk() || blockIdx == numberOfBlocks - 1) {
+                    indexBlock = temp;
+                    break;
+                }
+            }
 
             if (indexBlock.findById((int) datumRecord.getId()).isPresent())
                 throw new RecordAlreadyExistsException("Record with id [%d] already exists".formatted(datumRecord.getId()));
@@ -153,72 +164,70 @@ public class SimpleRepository {
         return new IndexRecord(datumRecord.getId(), ptr);
     }
 
-    public Optional<IndexBlock> searchIndexBlock(int id, Indicator indicator) {
+    public Optional<IndexBlock> searchIndexBlock(int key, Indicator indicator) {
         int length = indexArea.countNumberOfBlocks();
 
         if (length == 0)
             return Optional.empty();
 
-        if (length == 1)
-            return Optional.of(indexArea.readBlock(0));
+//        if (length == 0)
+//            return Optional.empty();
+//
+//        if (length == 1)
+//            return Optional.of(indexArea.readBlock(0));
 
         int k = log2(length, RoundingMode.DOWN), i = (int) pow(2, k) - 1;
 
         IndexBlock indexBlock = indexArea.readBlock(i);
-        int ind = indicator.calculate(id, indexBlock);
+        int itr = indicator.calculate(key, indexBlock);
 
-        if (ind == 0)
+        if (itr == 0)
             return Optional.of(indexBlock);
 
-        if (ind < 0)
-            return homogeneousBinarySearch(indicator, ind, length, i, k, id);
+        if (itr < 0)
+            return homogeneousBinarySearch(
+                    indicator, key, i - ((int) pow(2, k) / 2), (int) pow(2, k) / 2);
 
-        int expression = length - (int) pow(2, k);
-        if (expression != 0) {
-            int l = log2(expression, RoundingMode.DOWN);
-            i = length - (int) pow(2, l);
-
-            indexBlock = indexArea.readBlock(i);
-            ind = indicator.calculate(id, indexBlock);
-
-            if (ind == 0)
-                return Optional.of(indexBlock);
-
-            return homogeneousBinarySearch(indicator, ind, length, i, l, id);
+        if (length > (int) pow(2, k)) {
+            int l = log2(length - (int) pow(2, k) + 1, RoundingMode.DOWN);
+            return homogeneousBinarySearch(indicator, key, length - (int) pow(2, l), (int) pow(2, l));
         }
 
         return Optional.empty();
     }
 
-    private Optional<IndexBlock> homogeneousBinarySearch(Indicator indicator, int ind, int length, int i, int p, int id) {
-        int j = 1;
-        for (int n = countN(p, j++); n >= 0; n = countN(p, j++)) {
-            if (i >= length)
-                i = countI(-1, i, n);
-            else
-                i = countI(ind, i, n);
-
-//            if (n == 0 && (i < 0 || i >= length))
-//                return Optional.empty();
-
+    private Optional<IndexBlock> homogeneousBinarySearch(Indicator indicator, int key, int i, int step) {
+        do {
             IndexBlock indexBlock = indexArea.readBlock(i);
-            ind = indicator.calculate(id, indexBlock);
+            int itr = indicator.calculate(key, indexBlock);
 
-            if (ind == 0)
+            if (itr == 0)
                 return Optional.of(indexBlock);
 
-            if (n == 0)
-                break;
-        }
+            step /= 2;
+
+            i += itr < 0 ? -step : step;
+        } while (step > 0);
 
         return Optional.empty();
-    }
-
-    private static int countI(int indicator, int i, int n) {
-        return indicator < 0 ? i - ((n / 2) + 1) : i + ((n / 2) + 1);
-    }
-
-    private static int countN(int p, int j) {
-        return (int) pow(2, p - j);
+        //        int j = 1;
+//        for (int n = countN(p, j++); n >= 0; n = countN(p, j++)) {
+//            if (i >= length)
+//                i = countI(-1, i, n);
+//            else
+//                i = countI(ind, i, n);
+//
+////            if (n == 0 && (i < 0 || i >= length))
+////                return Optional.empty();
+//
+//            IndexBlock indexBlock = indexArea.readBlock(i);
+//            ind = indicator.calculate(id, indexBlock);
+//
+//            if (ind == 0)
+//                return Optional.of(indexBlock);
+//
+//            if (n == 0)
+//                break;
+//        }
     }
 }

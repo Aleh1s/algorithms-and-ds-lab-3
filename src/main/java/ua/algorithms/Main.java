@@ -7,6 +7,8 @@ import ua.algorithms.accessor.IndexFileAccessor;
 import ua.algorithms.exception.RecordAlreadyExistsException;
 import ua.algorithms.repository.SimpleRepository;
 import ua.algorithms.structure.DatumRecord;
+import ua.algorithms.structure.IndexBlock;
+import ua.algorithms.structure.IndexRecord;
 
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -81,6 +83,13 @@ public class Main {
                         }
                     }
                 });
+
+
+//        IntStream.range(0, 157)
+//                .forEach(i -> {
+//                    IndexBlock indexBlock = indexFileAccessor.readBlock(i);
+//                    System.out.println(indexBlock);
+//                });
 
 //        IntStream.of(0, 9_999, 5_000, -1, 10_000)
 //                        .forEach(i -> {
