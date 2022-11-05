@@ -8,7 +8,7 @@ import java.util.List;
 public class SearchIndicator implements Indicator {
 
     @Override
-    public int calculate(int id, IndexBlock block) {
+    public int calculate(long id, IndexBlock block) {
         List<IndexRecord> records = block.getRecords();
         IndexRecord first = records.get(0);
         if (records.size() == 1) {

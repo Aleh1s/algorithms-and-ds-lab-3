@@ -5,6 +5,6 @@ import ua.algorithms.structure.IndexRecord;
 
 public interface Indicator {
 
-    int calculate(int id, IndexBlock block);
+    int calculate(long id, IndexBlock block);
 
 }

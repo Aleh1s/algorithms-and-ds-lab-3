@@ -9,65 +9,35 @@ import java.util.*;
 @AllArgsConstructor
 public class IndexBlock {
 
+    private int size; // curr amount of index records
     private int index;
-    private int size; // curr size of data in block
-    private List<IndexRecord> records;
-    public static final int NUMBER_OFFSET = 0;
-    private static final int NUMBER_BYTES = Integer.BYTES;
-    public static final int SIZE_OFFSET = NUMBER_OFFSET + NUMBER_BYTES;
+    private Map<Long, IndexRecord> records;
+    public static final int INDEX_OFFSET = 0;
+    private static final int INDEX_BYTES = Integer.BYTES;
+    public static final int SIZE_OFFSET = INDEX_OFFSET + INDEX_BYTES;
     public static final int SIZE_BYTES = Integer.BYTES;
     public static final int RECORDS_OFFSET = SIZE_OFFSET + SIZE_BYTES;
     public static final int RECORDS_BYTES = 1024;
-    public static final int BYTES = NUMBER_BYTES + SIZE_BYTES + RECORDS_BYTES; // size of block in bytes
+    public static final int BYTES = INDEX_BYTES + SIZE_BYTES + RECORDS_BYTES; // size of block in bytes
 
     public boolean addRecord(IndexRecord indexRecord) {
-        if (records.isEmpty()) {
-            records.add(indexRecord);
-        } else {
-            boolean added = false;
-            for (int i = 0; i < records.size(); i++) {
-                if (indexRecord.getPk() < records.get(i).getPk()) {
-                    records.add(i, indexRecord);
-                    added = true;
-                    break;
-                }
-            }
-            if (!added) records.add(indexRecord);
-        }
+        records.put(indexRecord.getPk(), indexRecord);
         return ++size > RECORDS_BYTES / IndexRecord.BYTES;
     }
 
-    public IndexRecord retrieveAndRemoveLast() {
-        IndexRecord temp = records.get(records.size() - 1);
-        records.remove(temp);
-        size--;
-        return temp;
+    public Optional<IndexRecord> findById(long id) {
+        return Optional.ofNullable(records.get(id));
     }
 
-    public Optional<IndexRecord> findById(int id) {
-        int i = find(id);
+    public int delete(long id) {
+        IndexRecord i = records.remove(id);
 
-        if (i >= 0)
-            return Optional.of(records.get(i));
-
-        return Optional.empty();
-    }
-
-    public int delete(int id) {
-        int i = find(id);
-
-        if (i >= 0) {
-            records.remove(i);
+        if (Objects.nonNull(i)) {
             size--;
             return 1;
         }
 
         return 0;
-    }
-
-    private int find(int id) {
-        return Collections.binarySearch(
-                records, new IndexRecord(id, 0), Comparator.comparing(IndexRecord::getPk));
     }
 
 //    public int calculateIndicator(int id) {
@@ -93,15 +63,30 @@ public class IndexBlock {
 //    }
 
     public IndexBlock separate() {
-        List<IndexRecord> partOfRecords = new ArrayList<>();
-        int i = records.size() / 2;
-        for (int j = 0; j < i + 1; j++) {
-            partOfRecords.add(records.get(i));
-            records.remove(i);
-            this.size--;
+        TreeMap<Long, IndexRecord> partOfRecords = new TreeMap<>();
+        List<IndexRecord> values = valueOf(records.values());
+
+        int length = values.size() / 2; // 32
+
+        records.clear();
+
+        for (int i = 0; i < length; i++) {
+            IndexRecord indexRecord = values.get(i);
+            records.put(indexRecord.getPk(), indexRecord);
         }
 
-        return new IndexBlock(index + 1, partOfRecords.size(), partOfRecords);
+        for (int i = length; i < values.size(); i++) {
+            IndexRecord indexRecord = values.get(i);
+            partOfRecords.put(indexRecord.getPk(), indexRecord);
+        }
+
+        size -= partOfRecords.size();
+
+        return new IndexBlock(partOfRecords.size(), index + 1, partOfRecords);
+    }
+
+    private List<IndexRecord> valueOf(Collection<IndexRecord> values) {
+        return new ArrayList<>(values);
     }
 
     public boolean isEmpty() {
@@ -112,10 +97,15 @@ public class IndexBlock {
         this.index = index;
     }
 
+    public List<IndexRecord> getRecords() {
+        return valueOf(records.values());
+    }
+
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("Block{");
+        final StringBuffer sb = new StringBuffer("IndexBlock{");
         sb.append("size=").append(size);
+        sb.append(", index=").append(index);
         sb.append(", records=").append(records);
         sb.append('}');
         return sb.toString();

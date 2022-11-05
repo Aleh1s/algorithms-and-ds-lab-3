@@ -10,8 +10,10 @@ import ua.algorithms.structure.IndexBlock;
 import ua.algorithms.structure.IndexRecord;
 
 import java.math.RoundingMode;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.TreeMap;
 
 import static com.google.common.math.LongMath.log2;
 import static java.lang.Math.pow;
@@ -25,7 +27,7 @@ public class SimpleRepository {
         this.globalArea = globalArea;
     }
 
-    public Optional<DatumRecord> findById(int id) {
+    public Optional<DatumRecord> findById(long id) {
         Optional<IndexBlock> indexBlockOptional = searchIndexBlock(id, new SearchIndicator());
 
         if (indexBlockOptional.isPresent()) {
@@ -152,7 +154,8 @@ public class SimpleRepository {
 
     private void addFirst(DatumRecord datumRecord) {
         IndexRecord indexRecord = writeNewDatumRecord(datumRecord);
-        IndexBlock indexBlock = new IndexBlock(0, 1, List.of(indexRecord));
+        IndexBlock indexBlock = new IndexBlock(0, 0, new TreeMap<>());
+        indexBlock.addRecord(indexRecord);
         indexArea.write(indexBlock, indexBlock.getIndex());
     }
 
@@ -161,7 +164,7 @@ public class SimpleRepository {
         return new IndexRecord(datumRecord.getId(), ptr);
     }
 
-    public Optional<IndexBlock> searchIndexBlock(int key, Indicator indicator) {
+    public Optional<IndexBlock> searchIndexBlock(long key, Indicator indicator) {
         int length = indexArea.countNumberOfBlocks();
 
         if (length == 0)
@@ -187,7 +190,7 @@ public class SimpleRepository {
         return Optional.empty();
     }
 
-    private Optional<IndexBlock> homogeneousBinarySearch(Indicator indicator, int key, int i, int step) {
+    private Optional<IndexBlock> homogeneousBinarySearch(Indicator indicator, long key, int i, int step) {
         do {
             IndexBlock indexBlock = indexArea.readBlock(i);
             int itr = indicator.calculate(key, indexBlock);
@@ -198,6 +201,7 @@ public class SimpleRepository {
             step /= 2;
 
             i += itr < 0 ? -step : step;
+
         } while (step > 0);
 
         return Optional.empty();

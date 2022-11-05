@@ -11,9 +11,7 @@ import ua.algorithms.structure.IndexBlock;
 import ua.algorithms.structure.IndexRecord;
 
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.IntStream;
 
 import static com.google.common.math.LongMath.*;
@@ -33,8 +31,11 @@ public class Main {
                 globalFileAccessor
         );
 
-        indexFileAccessor.clearFile();
-        globalFileAccessor.clearFile();
+//        indexFileAccessor.clearFile();
+//        globalFileAccessor.clearFile();
+
+//        Integer last = integers.last();
+//        System.out.println(last);
 
 //        IntStream.range(1, 130)
 //                .forEach(i -> {
@@ -58,31 +59,29 @@ public class Main {
 //        long size = indexFileAccessor.getSizeOfFile();
 //        System.out.println(size);
 
-        IntStream.range(0, 10_000)
-                .forEach(i -> {
-                    DatumRecord dr = new DatumRecord(i, "value%d".formatted(i));
-                    if (i % 2 == 0) {
-                        try {
-                            if (i == 320)
-                                System.out.println();
-                            simpleRepository.insert(dr);
-                        } catch (RecordAlreadyExistsException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                });
-
-        IntStream.range(0, 10_000)
-                .forEach(i -> {
-                    DatumRecord dr = new DatumRecord(i, "value%d".formatted(i));
-                    if (i % 2 != 0) {
-                        try {
-                            simpleRepository.insert(dr);
-                        } catch (RecordAlreadyExistsException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                });
+//        IntStream.range(0, 10_000)
+//                .forEach(i -> {
+//                    DatumRecord dr = new DatumRecord(i, "value%d".formatted(i));
+//                    if (i % 2 == 0) {
+//                        try {
+//                            simpleRepository.insert(dr);
+//                        } catch (RecordAlreadyExistsException e) {
+//                            throw new RuntimeException(e);
+//                        }
+//                    }
+//                });
+//
+//        IntStream.range(0, 10_000)
+//                .forEach(i -> {
+//                    DatumRecord dr = new DatumRecord(i, "value%d".formatted(i));
+//                    if (i % 2 != 0) {
+//                        try {
+//                            simpleRepository.insert(dr);
+//                        } catch (RecordAlreadyExistsException e) {
+//                            throw new RuntimeException(e);
+//                        }
+//                    }
+//                });
 
 
 //        IntStream.range(0, 157)
@@ -104,11 +103,12 @@ public class Main {
 //                });
 
 
-        IntStream.range(0, 10_000)
-                .forEach(i -> {
-                    Optional<DatumRecord> d1 = simpleRepository.findById(i);
-                    d1.ifPresentOrElse(System.out::println, () -> System.err.println(i + " - does not exist"));
-                });
+//        IntStream.range(0, 10_000)
+//                .forEach(i -> {
+//                    Optional<DatumRecord> d1 = simpleRepository.findById(i);
+//                    d1.ifPresentOrElse(System.out::println, () -> System.err.println(i + " - does not exist"));
+//                });
+
 //
 //        IntStream intStream = IntStream.of(10_000, 20_000, 30_000, -10_000, -20_000, -30_000);
 //        intStream.forEach(i -> {
