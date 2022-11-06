@@ -1,17 +1,14 @@
-package ua.algorithms.repository;
+package ua.algorithms.mvc.model;
 
 import ua.algorithms.accessor.GlobalFileAccessor;
 import ua.algorithms.accessor.IndexFileAccessor;
 import ua.algorithms.exception.RecordAlreadyExistsException;
-import ua.algorithms.indicator.Indicator;
-import ua.algorithms.indicator.SearchIndicator;
 import ua.algorithms.mvc.Model;
 import ua.algorithms.structure.DatumRecord;
 import ua.algorithms.structure.IndexBlock;
 import ua.algorithms.structure.IndexRecord;
 
 import java.math.RoundingMode;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.TreeMap;
@@ -29,14 +26,14 @@ public class SimpleRepository implements Model {
     }
 
     public Optional<DatumRecord> findById(long id) {
-        Optional<IndexBlock> indexBlockOptional = searchIndexBlock(id, new SearchIndicator());
+        Optional<IndexBlock> indexBlockOptional = searchIndexBlock(id);
 
         if (indexBlockOptional.isPresent()) {
             IndexBlock indexBlock = indexBlockOptional.get();
             Optional<IndexRecord> indexRecordOptional = indexBlock.findById(id);
 
             if (indexRecordOptional.isPresent())
-                return Optional.of(globalArea.read(indexRecordOptional.get().getPtr()));
+                return Optional.of(globalArea.read(indexRecordOptional.get().ptr()));
         }
 
         return Optional.empty();
@@ -54,7 +51,7 @@ public class SimpleRepository implements Model {
             for (; blockIdx < numberOfIndexBlocks; blockIdx++) {
                 IndexBlock temp = indexArea.readBlock(blockIdx);
                 List<IndexRecord> records = temp.getRecords();
-                if (datumRecord.getId() < records.get(records.size() - 1).getPk() || blockIdx == numberOfIndexBlocks - 1) {
+                if (datumRecord.getId() < records.get(records.size() - 1).pk() || blockIdx == numberOfIndexBlocks - 1) {
                     indexBlock = temp;
                     break;
                 }
@@ -78,14 +75,14 @@ public class SimpleRepository implements Model {
 
     public int update(DatumRecord updatedDatumRecord) {
         long id = updatedDatumRecord.getId();
-        Optional<IndexBlock> optionalIndexBlock = searchIndexBlock(id, new SearchIndicator());
+        Optional<IndexBlock> optionalIndexBlock = searchIndexBlock(id);
 
         if (optionalIndexBlock.isPresent()) {
             IndexBlock indexBlock = optionalIndexBlock.get();
             Optional<IndexRecord> optionalIndexRecord = indexBlock.findById(id);
             if (optionalIndexRecord.isPresent()) {
                 IndexRecord indexRecord = optionalIndexRecord.get();
-                DatumRecord datumRecord = globalArea.read(indexRecord.getPtr());
+                DatumRecord datumRecord = globalArea.read(indexRecord.ptr());
 
                 if (!updatedDatumRecord.getFirstName().isBlank())
                     datumRecord.setFirstName(updatedDatumRecord.getFirstName());
@@ -96,7 +93,7 @@ public class SimpleRepository implements Model {
                 if (!updatedDatumRecord.getEmail().isBlank())
                     datumRecord.setEmail(updatedDatumRecord.getEmail());
 
-                globalArea.update(datumRecord, indexRecord.getPtr());
+                globalArea.update(datumRecord, indexRecord.ptr());
                 return 1;
             }
         }
@@ -105,7 +102,7 @@ public class SimpleRepository implements Model {
     }
 
     public int delete(long id) {
-        Optional<IndexBlock> optionalIndexBlock = searchIndexBlock(id, new SearchIndicator());
+        Optional<IndexBlock> optionalIndexBlock = searchIndexBlock(id);
 
         if (optionalIndexBlock.isPresent()) {
             IndexBlock curr = optionalIndexBlock.get();
@@ -175,7 +172,7 @@ public class SimpleRepository implements Model {
         return new IndexRecord(datumRecord.getId(), ptr);
     }
 
-    public Optional<IndexBlock> searchIndexBlock(long key, Indicator indicator) {
+    public Optional<IndexBlock> searchIndexBlock(long key) {
         int length = indexArea.countNumberOfBlocks();
 
         if (length == 0)
@@ -184,27 +181,27 @@ public class SimpleRepository implements Model {
         int k = log2(length, RoundingMode.DOWN), i = (int) pow(2, k) - 1;
 
         IndexBlock indexBlock = indexArea.readBlock(i);
-        int itr = indicator.calculate(key, indexBlock);
+        int itr = indexBlock.calculateIndicator(key, indexBlock);
 
         if (itr == 0)
             return Optional.of(indexBlock);
 
         if (itr < 0)
             return homogeneousBinarySearch(
-                    indicator, key, i - ((int) pow(2, k) / 2), (int) pow(2, k) / 2);
+                    key, i - ((int) pow(2, k) / 2), (int) pow(2, k) / 2);
 
         if (length > (int) pow(2, k)) {
             int l = log2(length - (int) pow(2, k) + 1, RoundingMode.DOWN);
-            return homogeneousBinarySearch(indicator, key, length - (int) pow(2, l), (int) pow(2, l));
+            return homogeneousBinarySearch(key, length - (int) pow(2, l), (int) pow(2, l));
         }
 
         return Optional.empty();
     }
 
-    private Optional<IndexBlock> homogeneousBinarySearch(Indicator indicator, long key, int i, int step) {
+    private Optional<IndexBlock> homogeneousBinarySearch(long key, int i, int step) {
         do {
             IndexBlock indexBlock = indexArea.readBlock(i);
-            int itr = indicator.calculate(key, indexBlock);
+            int itr = indexBlock.calculateIndicator(key, indexBlock);
 
             if (itr == 0)
                 return Optional.of(indexBlock);

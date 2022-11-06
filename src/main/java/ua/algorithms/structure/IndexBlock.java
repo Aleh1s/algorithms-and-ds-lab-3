@@ -9,7 +9,7 @@ import java.util.*;
 @AllArgsConstructor
 public class IndexBlock {
 
-    private int size; // curr amount of index records
+    private int size;
     private int index;
     private Map<Long, IndexRecord> records;
     public static final int INDEX_OFFSET = 0;
@@ -21,7 +21,7 @@ public class IndexBlock {
     public static final int BYTES = INDEX_BYTES + SIZE_BYTES + RECORDS_BYTES; // size of block in bytes
 
     public boolean addRecord(IndexRecord indexRecord) {
-        records.put(indexRecord.getPk(), indexRecord);
+        records.put(indexRecord.pk(), indexRecord);
         return ++size > RECORDS_BYTES / IndexRecord.BYTES;
     }
 
@@ -40,27 +40,22 @@ public class IndexBlock {
         return 0;
     }
 
-//    public int calculateIndicator(int id) {
-//        IndexRecord first = records.get(0);
-//        if (records.size() == 1) {
-//            if (id == first.getPk())
-//                return 0;
-//
-//            if (id < first.getPk())
-//                return -1;
-//
-//            return 1;
-//        }
-//
-//        IndexRecord last = records.get(records.size() - 1);
-//        if (id >= first.getPk() && id <= last.getPk())
-//            return 0;
-//
-//        if (id < first.getPk())
-//            return -1;
-//
-//        return 1;
-//    }
+    public int calculateIndicator(long id, IndexBlock block) {
+        List<IndexRecord> records = block.getRecords();
+        IndexRecord first = records.get(0);
+        if (records.size() == 1) {
+            return Long.compare(id, first.pk());
+        }
+
+        IndexRecord last = records.get(records.size() - 1);
+        if (id >= first.pk() && id <= last.pk())
+            return 0;
+
+        if (id < first.pk())
+            return -1;
+
+        return 1;
+    }
 
     public IndexBlock separate() {
         TreeMap<Long, IndexRecord> partOfRecords = new TreeMap<>();
@@ -72,12 +67,12 @@ public class IndexBlock {
 
         for (int i = 0; i < length; i++) {
             IndexRecord indexRecord = values.get(i);
-            records.put(indexRecord.getPk(), indexRecord);
+            records.put(indexRecord.pk(), indexRecord);
         }
 
         for (int i = length; i < values.size(); i++) {
             IndexRecord indexRecord = values.get(i);
-            partOfRecords.put(indexRecord.getPk(), indexRecord);
+            partOfRecords.put(indexRecord.pk(), indexRecord);
         }
 
         size -= partOfRecords.size();
@@ -101,13 +96,4 @@ public class IndexBlock {
         return valueOf(records.values());
     }
 
-    @Override
-    public String toString() {
-        final StringBuffer sb = new StringBuffer("IndexBlock{");
-        sb.append("size=").append(size);
-        sb.append(", index=").append(index);
-        sb.append(", records=").append(records);
-        sb.append('}');
-        return sb.toString();
-    }
 }

@@ -1,11 +1,11 @@
-package ua.algorithms.gui;
+package ua.algorithms.mvc.view;
 
 import ua.algorithms.mvc.Controller;
 
 import javax.swing.*;
 import java.awt.*;
 
-import static ua.algorithms.gui.BasicAction.*;
+import static ua.algorithms.mvc.view.BasicAction.*;
 
 public class SimpleGUI extends JFrame {
 
@@ -140,7 +140,7 @@ public class SimpleGUI extends JFrame {
                 outputArea.setText(message);
             }
         });
-        
+
         setVisible(true);
     }
 }

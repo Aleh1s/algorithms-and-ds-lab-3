@@ -1,6 +1,8 @@
-package ua.algorithms.mvc;
+package ua.algorithms.mvc.controller;
 
 import ua.algorithms.exception.RecordAlreadyExistsException;
+import ua.algorithms.mvc.Controller;
+import ua.algorithms.mvc.Model;
 import ua.algorithms.structure.DatumRecord;
 
 import java.util.Objects;
@@ -21,6 +23,7 @@ public class SimpleController implements Controller {
     private static final String FIRST_NAME_FIELD = "first name";
     private static final String LAST_NAME_FIELD = "last name";
     private static final String EMAIL = "email";
+
     @Override
     public String select(String pk) {
         long id;

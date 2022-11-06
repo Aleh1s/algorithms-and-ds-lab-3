@@ -1,26 +1,14 @@
 package ua.algorithms;
 
-import com.github.javafaker.Faker;
 import lombok.SneakyThrows;
 import ua.algorithms.accessor.FileAccessor;
 import ua.algorithms.accessor.GlobalFileAccessor;
 import ua.algorithms.accessor.IndexFileAccessor;
-import ua.algorithms.exception.RecordAlreadyExistsException;
-import ua.algorithms.gui.SimpleGUI;
 import ua.algorithms.mvc.Controller;
 import ua.algorithms.mvc.Model;
-import ua.algorithms.mvc.SimpleController;
-import ua.algorithms.repository.SimpleRepository;
-import ua.algorithms.structure.DatumRecord;
-import ua.algorithms.structure.IndexBlock;
-import ua.algorithms.structure.IndexRecord;
-
-import java.math.RoundingMode;
-import java.util.*;
-import java.util.stream.IntStream;
-
-import static com.google.common.math.LongMath.*;
-import static java.lang.Math.pow;
+import ua.algorithms.mvc.controller.SimpleController;
+import ua.algorithms.mvc.model.SimpleRepository;
+import ua.algorithms.mvc.view.SimpleGUI;
 
 
 public class Main {
@@ -35,176 +23,5 @@ public class Main {
         Controller controller = new SimpleController(model);
         SimpleGUI simpleGUI = new SimpleGUI(controller);
         simpleGUI.init();
-
-//        SimpleRepository simpleRepository = new SimpleRepository(
-//                indexFileAccessor,
-//                globalFileAccessor
-//        );
-//
-//        indexFileAccessor.clearFile();
-//        globalFileAccessor.clearFile();
-
-//        Integer last = integers.last();
-//        System.out.println(last);
-
-//        IntStream.range(1, 130)
-//                .forEach(i -> {
-//                    try {
-//                        simpleRepository.insert(new DatumRecord(i, "value%d".formatted(i)));
-//                    } catch (RecordAlreadyExistsException e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                });
-//
-//        IntStream.range(64, 129)
-//                .forEach(i -> {
-//                    simpleRepository.delete(i);
-//                    simpleRepository.findById(i).ifPresentOrElse(System.out::println, () -> System.out.println("Removed"));
-//                });
-//
-//        simpleRepository.findById(129).ifPresentOrElse(System.out::println, () -> System.out.println("Removed"));
-//
-//        int i = indexFileAccessor.countNumberOfBlocks();
-//        System.out.println(i);
-//        long size = indexFileAccessor.getSizeOfFile();
-//        System.out.println(size);
-
-//        Faker faker = new Faker();
-//
-//        IntStream.range(0, 10_000)
-//                .forEach(i -> {
-//                    DatumRecord dr = new DatumRecord(i);
-//                    dr.setFirstName(faker.name().firstName());
-//                    dr.setLastName(faker.name().lastName());
-//                    dr.setEmail(faker.internet().emailAddress());
-//                    if (i % 2 == 0) {
-//                        try {
-//                            simpleRepository.insert(dr);
-//                        } catch (RecordAlreadyExistsException e) {
-//                            throw new RuntimeException(e);
-//                        }
-//                    }
-//                });
-//
-//        IntStream.range(0, 10_000)
-//                .forEach(i -> {
-//                    DatumRecord dr = new DatumRecord(i);
-//                    dr.setFirstName(faker.name().firstName());
-//                    dr.setLastName(faker.name().lastName());
-//                    dr.setEmail(faker.internet().emailAddress());
-//                    if (i % 2 != 0) {
-//                        try {
-//                            simpleRepository.insert(dr);
-//                        } catch (RecordAlreadyExistsException e) {
-//                            throw new RuntimeException(e);
-//                        }
-//                    }
-//                });
-
-
-//        IntStream.range(0, 157)
-//                .forEach(i -> {
-//                    IndexBlock indexBlock = indexFileAccessor.readBlock(i);
-//                    System.out.println(indexBlock);
-//                });
-
-//        IntStream.of(0, 9_999, 5_000, -1, 10_000)
-//                        .forEach(i -> {
-//                            int updated = simpleRepository.update(i, "Updated");
-//                            System.out.println(updated);
-//                        });
-//
-//        IntStream.of(0, 9_999, 5_000, -1, 10_000)
-//                .forEach(i -> {
-//                    Optional<DatumRecord> d1 = simpleRepository.findById(i);
-//                    d1.ifPresentOrElse(System.out::println, () -> System.err.println(i + " - does not exist"));
-//                });
-
-
-//        IntStream.range(0, 10_000)
-//                .forEach(i -> {
-//                    Optional<DatumRecord> d1 = simpleRepository.findById(i);
-//                    d1.ifPresentOrElse(System.out::println, () -> System.err.println(i + " - does not exist"));
-//                });
-
-//
-//        IntStream intStream = IntStream.of(10_000, 20_000, 30_000, -10_000, -20_000, -30_000);
-//        intStream.forEach(i -> {
-//            Optional<DatumRecord> d1 = simpleRepository.findDatumRecordById(i);
-//            d1.ifPresentOrElse(System.out::println, () -> System.err.println(i + " - does not exist"));
-//        });
-
-
-//        int[] arr1 = {2, 5, 8, 9, 12, 16, 19, 20, 23, 25, 27, 35};
-//        Arrays.stream(arr1)
-//                .forEach(i -> System.out.println(i + " - " + search(arr1, i)));
-//        IntStream.of(-1, 0, 1, 36, 100, 200)
-//                .forEach(i -> System.out.println(i + " - " + search(arr1, i)));
-//
-//        for (int i = 0; i < 10_000; i++) {
-//            int[] ints = IntStream.range(0, i).toArray();
-//            Arrays.stream(ints)
-//                    .forEach(j -> {
-//                        int search = search(ints, j);
-//
-//                        if (j != search)
-//                            throw new IllegalArgumentException(ints.length + ", find: " + j + ", actual: " + search);
-//                    });
-//        }
-
-//        int[] ints = IntStream.range(0, 16).toArray();
-//        int search = search(ints, 0);
-//        System.out.println(search);
-
-//
-//        int[] arr = {2, 5, 8, 9, 12, 16, 19, 20, 23, 25, 27, 35};
-//        System.out.println(search(arr, 2));
-//        System.out.println(search(arr, 20));
-//        System.out.println(search(arr, 35));
     }
-
-    public static int search(int[] arr, int search) {
-        int k = log2(arr.length, RoundingMode.DOWN), i = (int) pow(2, k) - 1;
-
-        if (search == arr[i])
-            return i;
-
-        if (search < arr[i])
-            return homogeneousBinarySearch(arr, i, search, k);
-
-        int l = log2(arr.length - (int) pow(2, k), RoundingMode.DOWN);
-        i = arr.length - (int) pow(2, l);
-
-        if (search == arr[i])
-            return i;
-
-        return homogeneousBinarySearch(arr, i, search, l);
-    }
-
-    public static int homogeneousBinarySearch(int[] arr, int i, int search, int p) {
-        int j = 1;
-        for (int n = countN(p, j++); n >= 0; n = countN(p, j++)) {
-            if (i >= arr.length)
-                i = countI(search, search + 1, i, n);
-            else
-                i = countI(search, arr[i], i, n);
-
-            if (n == 0 && (i < 0 || i >= arr.length))
-                return -1;
-
-            if (i < arr.length && search == arr[i])
-                return i;
-        }
-
-        return -1;
-    }
-
-    public static int countI(int search, int curr, int i, int n) {
-        return search < curr ? i - ((n / 2) + 1) : i + ((n / 2) + 1);
-    }
-
-    public static int countN(int p, int j) {
-        return (int) pow(2, p - j);
-    }
-
 }

@@ -1,4 +1,4 @@
-package ua.algorithms.gui;
+package ua.algorithms.mvc.view;
 
 public enum BasicAction {
 

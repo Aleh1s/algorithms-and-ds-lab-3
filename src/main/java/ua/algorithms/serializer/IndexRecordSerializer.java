@@ -8,8 +8,8 @@ public class IndexRecordSerializer {
     public static byte[] serialize(IndexRecord record) {
         return ByteBuffer
                 .allocate(IndexRecord.BYTES)
-                .putLong(record.getPk())
-                .putLong(record.getPtr())
+                .putLong(record.pk())
+                .putLong(record.ptr())
                 .array();
     }
 

@@ -3,7 +3,6 @@ package ua.algorithms.serializer;
 import ua.algorithms.structure.IndexBlock;
 import ua.algorithms.structure.IndexRecord;
 
-import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
 import java.util.TreeMap;
 
@@ -26,7 +25,7 @@ public class IndexBlockSerializer {
             byte[] indexRecordBytes = new byte[IndexRecord.BYTES];
             wrap.get(IndexBlock.RECORDS_OFFSET + i * IndexRecord.BYTES, indexRecordBytes);
             IndexRecord indexRecord = IndexRecordSerializer.deserialize(indexRecordBytes);
-            records.put(indexRecord.getPk(), indexRecord);
+            records.put(indexRecord.pk(), indexRecord);
         }
         return new IndexBlock(size, index, records);
     }
