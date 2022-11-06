@@ -14,8 +14,10 @@ public class SimpleGUI extends JFrame {
     private JRadioButton insertRadio;
     private JRadioButton deleteRadio;
     private JRadioButton updateRadio;
-    private JTextArea outputArea;
-    private JTextField valueInputField;
+    private JTextPane outputArea;
+    private JTextField firstNameInputField;
+    private JTextField lastNameInputField;
+    private JTextField emailInputField;
     private JTextField pkInputField;
     private final Controller controller;
 
@@ -47,25 +49,40 @@ public class SimpleGUI extends JFrame {
         radioPanel.add(updateRadio);
         radioPanel.setLayout(new GridLayout(4, 1, 10, 10));
 
-        outputArea = new JTextArea();
+        outputArea = new JTextPane();
         outputArea.setToolTipText("Output area");
 
-        valueInputField = new JTextField("Value");
-        valueInputField.setToolTipText("Value");
 
-        pkInputField = new JTextField("Primary key");
-        pkInputField.setToolTipText("Primary key");
+        String primaryKeyText = "Primary key";
+        pkInputField = new JTextField(primaryKeyText);
+        pkInputField.setToolTipText(primaryKeyText);
+
+        String firstNameText = "First name";
+        firstNameInputField = new JTextField(firstNameText);
+        firstNameInputField.setToolTipText(firstNameText);
+
+        String lastNameText = "Last name";
+        lastNameInputField = new JTextField(lastNameText);
+        lastNameInputField.setToolTipText(lastNameText);
+
+        String emailText = "Email";
+        emailInputField = new JTextField(emailText);
+        emailInputField.setToolTipText(emailText);
 
         actionButton = new JButton(SELECT.getActionName());
         actionButton.setToolTipText("Action button");
 
-        valueInputField.setEditable(false);
+        firstNameInputField.setEditable(false);
+        lastNameInputField.setEditable(false);
+        emailInputField.setEditable(false);
 
         Panel actionPanel = new Panel();
         actionPanel.add(pkInputField);
-        actionPanel.add(valueInputField);
+        actionPanel.add(firstNameInputField);
+        actionPanel.add(lastNameInputField);
+        actionPanel.add(emailInputField);
         actionPanel.add(actionButton);
-        actionPanel.setLayout(new GridLayout(3, 1, 10, 10));
+        actionPanel.setLayout(new GridLayout(5, 1, 10, 10));
 
         Container contentPane = getContentPane();
         contentPane.setLayout(new GridLayout(1, 3, 10, 10));
@@ -75,22 +92,30 @@ public class SimpleGUI extends JFrame {
 
         selectRadio.addActionListener(e -> {
             actionButton.setText(SELECT.getActionName());
-            valueInputField.setEditable(false);
+            firstNameInputField.setEditable(false);
+            lastNameInputField.setEditable(false);
+            emailInputField.setEditable(false);
         });
 
         insertRadio.addActionListener(e -> {
             actionButton.setText(INSERT.getActionName());
-            valueInputField.setEditable(true);
+            firstNameInputField.setEditable(true);
+            lastNameInputField.setEditable(true);
+            emailInputField.setEditable(true);
         });
 
         updateRadio.addActionListener(e -> {
             actionButton.setText(UPDATE.getActionName());
-            valueInputField.setEditable(true);
+            firstNameInputField.setEditable(true);
+            lastNameInputField.setEditable(true);
+            emailInputField.setEditable(true);
         });
 
         deleteRadio.addActionListener(e -> {
             actionButton.setText(DELETE.getActionName());
-            valueInputField.setEditable(false);
+            firstNameInputField.setEditable(false);
+            lastNameInputField.setEditable(false);
+            emailInputField.setEditable(false);
         });
 
         actionButton.addActionListener(e -> {
@@ -99,12 +124,16 @@ public class SimpleGUI extends JFrame {
                 String message = controller.select(pk);
                 outputArea.setText(message);
             } else if (insertRadio.isSelected()) {
-                String value = valueInputField.getText();
-                String message = controller.insert(pk, value);
+                String firstName = firstNameInputField.getText();
+                String lastName = lastNameInputField.getText();
+                String email = emailInputField.getText();
+                String message = controller.insert(pk, firstName, lastName, email);
                 outputArea.setText(message);
             } else if (updateRadio.isSelected()) {
-                String value = valueInputField.getText();
-                String message = controller.update(pk, value);
+                String firstName = firstNameInputField.getText();
+                String lastName = lastNameInputField.getText();
+                String email = emailInputField.getText();
+                String message = controller.update(pk, firstName, lastName, email);
                 outputArea.setText(message);
             } else {
                 String message = controller.delete(pk);

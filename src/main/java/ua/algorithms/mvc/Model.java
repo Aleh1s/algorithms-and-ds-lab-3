@@ -8,8 +8,8 @@ import java.util.Optional;
 public interface Model {
 
     Optional<DatumRecord> findById(long id);
-    int insert(DatumRecord datumRecord) throws RecordAlreadyExistsException;
-    int update(long id, String newValue);
+    int insert(DatumRecord newDatumRecord) throws RecordAlreadyExistsException;
+    int update(DatumRecord updatedDatumRecord);
     int delete(long id);
 
 }

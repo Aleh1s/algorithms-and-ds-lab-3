@@ -3,19 +3,24 @@ package ua.algorithms.mvc;
 import ua.algorithms.exception.RecordAlreadyExistsException;
 import ua.algorithms.structure.DatumRecord;
 
+import java.util.Objects;
 import java.util.Optional;
 
 public class SimpleController implements Controller {
 
-    private Model model;
+    private final Model model;
 
     public SimpleController(Model model) {
         this.model = model;
     }
 
     private static final String INVALID_INPUT = "Invalid input";
-    private static final String VIOLATION_OF_CONSTRAINT = "Violation of constraint. Value length must be <= 60 but actually [%d]";
+    private static final String VIOLATION_OF_LENGTH_CONSTRAINT = "Violation of constraint. Value [%s] length must be <= [%d] but actually [%d]";
+    private static final String VIOLATION_OF_EMPTY_VALUE_CONSTANT = "Violation of constraint. Value [%s] length must be present";
     private static final String RECORDS_AFFECTED = "%d records was affected";
+    private static final String FIRST_NAME_FIELD = "first name";
+    private static final String LAST_NAME_FIELD = "last name";
+    private static final String EMAIL = "email";
     @Override
     public String select(String pk) {
         long id;
@@ -34,7 +39,7 @@ public class SimpleController implements Controller {
     }
 
     @Override
-    public String insert(String pk, String value) {
+    public String insert(String pk, String firstName, String lastName, String email) {
         long id;
         try {
             id = Long.parseLong(pk);
@@ -42,12 +47,23 @@ public class SimpleController implements Controller {
             return INVALID_INPUT;
         }
 
-        if (value.length() > 60)
-            return VIOLATION_OF_CONSTRAINT.formatted(value.length());
+        if (firstName.length() == 0)
+            return VIOLATION_OF_EMPTY_VALUE_CONSTANT.formatted(FIRST_NAME_FIELD);
+
+        if (lastName.length() == 0)
+            return VIOLATION_OF_EMPTY_VALUE_CONSTANT.formatted(LAST_NAME_FIELD);
+
+        if (email.length() == 0)
+            return VIOLATION_OF_EMPTY_VALUE_CONSTANT.formatted(EMAIL);
+
+        String check = checkLengthConstraint(firstName, lastName, email);
+
+        if (Objects.nonNull(check))
+            return check;
 
         int insert;
         try {
-            insert = model.insert(new DatumRecord(id, value));
+            insert = model.insert(new DatumRecord(id, firstName, lastName, email));
         } catch (RecordAlreadyExistsException e) {
             return e.getMessage();
         }
@@ -56,7 +72,7 @@ public class SimpleController implements Controller {
     }
 
     @Override
-    public String update(String pk, String newValue) {
+    public String update(String pk, String firstName, String lastName, String email) {
         long id;
         try {
             id = Long.parseLong(pk);
@@ -64,10 +80,12 @@ public class SimpleController implements Controller {
             return INVALID_INPUT;
         }
 
-        if (newValue.length() > 60)
-            return VIOLATION_OF_CONSTRAINT.formatted(newValue.length());
+        String check = checkLengthConstraint(firstName, lastName, email);
 
-        int update = model.update(id, newValue);
+        if (Objects.nonNull(check))
+            return check;
+
+        int update = model.update(new DatumRecord(id, firstName, lastName, email));
 
         return RECORDS_AFFECTED.formatted(update);
     }
@@ -86,5 +104,20 @@ public class SimpleController implements Controller {
         return RECORDS_AFFECTED.formatted(update);
     }
 
+    private String checkLengthConstraint(String firstName, String lastName, String email) {
+        if (firstName.length() > DatumRecord.FIRST_NAME_LENGTH)
+            return VIOLATION_OF_LENGTH_CONSTRAINT.formatted(
+                    FIRST_NAME_FIELD, DatumRecord.FIRST_NAME_LENGTH, firstName.length());
+
+        if (lastName.length() > DatumRecord.LAST_NAME_LENGTH)
+            return VIOLATION_OF_LENGTH_CONSTRAINT.formatted(
+                    LAST_NAME_FIELD, DatumRecord.LAST_NAME_LENGTH, lastName.length());
+
+        if (email.length() > DatumRecord.EMAIL_LENGTH)
+            return VIOLATION_OF_LENGTH_CONSTRAINT.formatted(EMAIL,
+                    DatumRecord.EMAIL_LENGTH, email.length());
+
+        return null;
+    }
 
 }

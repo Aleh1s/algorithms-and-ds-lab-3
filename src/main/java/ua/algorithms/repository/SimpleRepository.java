@@ -76,7 +76,8 @@ public class SimpleRepository implements Model {
         return 1;
     }
 
-    public int update(long id, String newValue) {
+    public int update(DatumRecord updatedDatumRecord) {
+        long id = updatedDatumRecord.getId();
         Optional<IndexBlock> optionalIndexBlock = searchIndexBlock(id, new SearchIndicator());
 
         if (optionalIndexBlock.isPresent()) {
@@ -85,7 +86,16 @@ public class SimpleRepository implements Model {
             if (optionalIndexRecord.isPresent()) {
                 IndexRecord indexRecord = optionalIndexRecord.get();
                 DatumRecord datumRecord = globalArea.read(indexRecord.getPtr());
-                datumRecord.setValue(newValue);
+
+                if (!updatedDatumRecord.getFirstName().isBlank())
+                    datumRecord.setFirstName(updatedDatumRecord.getFirstName());
+
+                if (!updatedDatumRecord.getLastName().isBlank())
+                    datumRecord.setLastName(updatedDatumRecord.getLastName());
+
+                if (!updatedDatumRecord.getEmail().isBlank())
+                    datumRecord.setEmail(updatedDatumRecord.getEmail());
+
                 globalArea.update(datumRecord, indexRecord.getPtr());
                 return 1;
             }

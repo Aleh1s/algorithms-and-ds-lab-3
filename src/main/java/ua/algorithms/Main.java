@@ -1,5 +1,6 @@
 package ua.algorithms;
 
+import com.github.javafaker.Faker;
 import lombok.SneakyThrows;
 import ua.algorithms.accessor.FileAccessor;
 import ua.algorithms.accessor.GlobalFileAccessor;
@@ -39,7 +40,7 @@ public class Main {
 //                indexFileAccessor,
 //                globalFileAccessor
 //        );
-
+//
 //        indexFileAccessor.clearFile();
 //        globalFileAccessor.clearFile();
 
@@ -68,9 +69,14 @@ public class Main {
 //        long size = indexFileAccessor.getSizeOfFile();
 //        System.out.println(size);
 
+//        Faker faker = new Faker();
+//
 //        IntStream.range(0, 10_000)
 //                .forEach(i -> {
-//                    DatumRecord dr = new DatumRecord(i, "value%d".formatted(i));
+//                    DatumRecord dr = new DatumRecord(i);
+//                    dr.setFirstName(faker.name().firstName());
+//                    dr.setLastName(faker.name().lastName());
+//                    dr.setEmail(faker.internet().emailAddress());
 //                    if (i % 2 == 0) {
 //                        try {
 //                            simpleRepository.insert(dr);
@@ -82,7 +88,10 @@ public class Main {
 //
 //        IntStream.range(0, 10_000)
 //                .forEach(i -> {
-//                    DatumRecord dr = new DatumRecord(i, "value%d".formatted(i));
+//                    DatumRecord dr = new DatumRecord(i);
+//                    dr.setFirstName(faker.name().firstName());
+//                    dr.setLastName(faker.name().lastName());
+//                    dr.setEmail(faker.internet().emailAddress());
 //                    if (i % 2 != 0) {
 //                        try {
 //                            simpleRepository.insert(dr);

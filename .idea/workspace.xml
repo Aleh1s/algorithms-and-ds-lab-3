@@ -6,12 +6,15 @@
   <component name="ChangeListManager">
     <list default="true" id="a622ef3d-6af8-4ca7-afc7-4235ba35ed0e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/gui/SimpleGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/gui/SimpleGUI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/mvc/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/mvc/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/mvc/Model.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/mvc/Model.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/mvc/SimpleController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/mvc/SimpleController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/repository/SimpleRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/repository/SimpleRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/serializer/DatumRecordSerializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/serializer/DatumRecordSerializer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/structure/DatumRecord.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/structure/DatumRecord.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/structure/IndexBlock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/structure/IndexBlock.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -110,7 +113,7 @@
       <workItem from="1667463508297" duration="3231000" />
       <workItem from="1667543010730" duration="74000" />
       <workItem from="1667662464165" duration="11434000" />
-      <workItem from="1667725440023" duration="8222000" />
+      <workItem from="1667725440023" duration="11724000" />
     </task>
     <servers />
   </component>
