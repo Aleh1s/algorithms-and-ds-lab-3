@@ -5,6 +5,7 @@ import ua.algorithms.accessor.IndexFileAccessor;
 import ua.algorithms.exception.RecordAlreadyExistsException;
 import ua.algorithms.indicator.Indicator;
 import ua.algorithms.indicator.SearchIndicator;
+import ua.algorithms.mvc.Model;
 import ua.algorithms.structure.DatumRecord;
 import ua.algorithms.structure.IndexBlock;
 import ua.algorithms.structure.IndexRecord;
@@ -18,7 +19,7 @@ import java.util.TreeMap;
 import static com.google.common.math.LongMath.log2;
 import static java.lang.Math.pow;
 
-public class SimpleRepository {
+public class SimpleRepository implements Model {
     private final IndexFileAccessor indexArea;
     private final GlobalFileAccessor globalArea;
 
@@ -75,7 +76,7 @@ public class SimpleRepository {
         return 1;
     }
 
-    public int update(int id, String value) {
+    public int update(long id, String newValue) {
         Optional<IndexBlock> optionalIndexBlock = searchIndexBlock(id, new SearchIndicator());
 
         if (optionalIndexBlock.isPresent()) {
@@ -84,7 +85,7 @@ public class SimpleRepository {
             if (optionalIndexRecord.isPresent()) {
                 IndexRecord indexRecord = optionalIndexRecord.get();
                 DatumRecord datumRecord = globalArea.read(indexRecord.getPtr());
-                datumRecord.setValue(value);
+                datumRecord.setValue(newValue);
                 globalArea.update(datumRecord, indexRecord.getPtr());
                 return 1;
             }
@@ -93,7 +94,7 @@ public class SimpleRepository {
         return 0;
     }
 
-    public int delete(int id) {
+    public int delete(long id) {
         Optional<IndexBlock> optionalIndexBlock = searchIndexBlock(id, new SearchIndicator());
 
         if (optionalIndexBlock.isPresent()) {
