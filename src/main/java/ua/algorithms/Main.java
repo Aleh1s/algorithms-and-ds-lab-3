@@ -5,6 +5,7 @@ import ua.algorithms.accessor.FileAccessor;
 import ua.algorithms.accessor.GlobalFileAccessor;
 import ua.algorithms.accessor.IndexFileAccessor;
 import ua.algorithms.exception.RecordAlreadyExistsException;
+import ua.algorithms.gui.SimpleGUI;
 import ua.algorithms.repository.SimpleRepository;
 import ua.algorithms.structure.DatumRecord;
 import ua.algorithms.structure.IndexBlock;
@@ -21,15 +22,18 @@ import static java.lang.Math.pow;
 public class Main {
     @SneakyThrows
     public static void main(String[] args) {
-        IndexFileAccessor indexFileAccessor =
-                (IndexFileAccessor) FileAccessor.of("src/main/resources/index.bin", "INDEX");
-        GlobalFileAccessor globalFileAccessor =
-                (GlobalFileAccessor) FileAccessor.of("src/main/resources/global.bin", "GLOBAL");
+        SimpleGUI simpleGUI = new SimpleGUI();
+        simpleGUI.init();
 
-        SimpleRepository simpleRepository = new SimpleRepository(
-                indexFileAccessor,
-                globalFileAccessor
-        );
+//        IndexFileAccessor indexFileAccessor =
+//                (IndexFileAccessor) FileAccessor.of("src/main/resources/index.bin", "INDEX");
+//        GlobalFileAccessor globalFileAccessor =
+//                (GlobalFileAccessor) FileAccessor.of("src/main/resources/global.bin", "GLOBAL");
+//
+//        SimpleRepository simpleRepository = new SimpleRepository(
+//                indexFileAccessor,
+//                globalFileAccessor
+//        );
 
 //        indexFileAccessor.clearFile();
 //        globalFileAccessor.clearFile();
