@@ -19,6 +19,7 @@ import static java.lang.Math.pow;
 public class SimpleRepository implements Model {
     private final IndexFileAccessor indexArea;
     private final GlobalFileAccessor globalArea;
+    private int counter;
 
     public SimpleRepository(IndexFileAccessor indexArea, GlobalFileAccessor globalArea) {
         this.indexArea = indexArea;
@@ -27,6 +28,7 @@ public class SimpleRepository implements Model {
 
     public Optional<DatumRecord> findById(long id) {
         Optional<IndexBlock> indexBlockOptional = searchIndexBlock(id);
+        System.out.println("Number of comparing: " + counter);
 
         if (indexBlockOptional.isPresent()) {
             IndexBlock indexBlock = indexBlockOptional.get();
@@ -58,7 +60,7 @@ public class SimpleRepository implements Model {
             }
 
             assert indexBlock != null;
-            if (indexBlock.findById((int) datumRecord.getId()).isPresent())
+            if (indexBlock.findById(datumRecord.getId()).isPresent())
                 throw new RecordAlreadyExistsException("Record with id [%d] already exists".formatted(datumRecord.getId()));
 
             boolean isOvercrowded = indexBlock.addRecord(indexRecord);
@@ -173,6 +175,7 @@ public class SimpleRepository implements Model {
     }
 
     public Optional<IndexBlock> searchIndexBlock(long key) {
+        counter = 0;
         int length = indexArea.countNumberOfBlocks();
 
         if (length == 0)
@@ -181,7 +184,8 @@ public class SimpleRepository implements Model {
         int k = log2(length, RoundingMode.DOWN), i = (int) pow(2, k) - 1;
 
         IndexBlock indexBlock = indexArea.readBlock(i);
-        int itr = indexBlock.calculateIndicator(key, indexBlock);
+        int itr = indexBlock.calculateIndicator(key);
+        counter++;
 
         if (itr == 0)
             return Optional.of(indexBlock);
@@ -201,7 +205,8 @@ public class SimpleRepository implements Model {
     private Optional<IndexBlock> homogeneousBinarySearch(long key, int i, int step) {
         do {
             IndexBlock indexBlock = indexArea.readBlock(i);
-            int itr = indexBlock.calculateIndicator(key, indexBlock);
+            int itr = indexBlock.calculateIndicator(key);
+            counter++;
 
             if (itr == 0)
                 return Optional.of(indexBlock);

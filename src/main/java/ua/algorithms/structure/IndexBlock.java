@@ -40,8 +40,8 @@ public class IndexBlock {
         return 0;
     }
 
-    public int calculateIndicator(long id, IndexBlock block) {
-        List<IndexRecord> records = block.getRecords();
+    public int calculateIndicator(long id) {
+        List<IndexRecord> records = getRecords();
         IndexRecord first = records.get(0);
         if (records.size() == 1) {
             return Long.compare(id, first.pk());

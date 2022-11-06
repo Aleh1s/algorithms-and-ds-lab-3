@@ -55,19 +55,15 @@ public class SimpleGUI extends JFrame {
 
         String primaryKeyText = "Primary key";
         pkInputField = new JTextField(primaryKeyText);
-        pkInputField.setToolTipText(primaryKeyText);
 
         String firstNameText = "First name";
         firstNameInputField = new JTextField(firstNameText);
-        firstNameInputField.setToolTipText(firstNameText);
 
         String lastNameText = "Last name";
         lastNameInputField = new JTextField(lastNameText);
-        lastNameInputField.setToolTipText(lastNameText);
 
         String emailText = "Email";
         emailInputField = new JTextField(emailText);
-        emailInputField.setToolTipText(emailText);
 
         actionButton = new JButton(SELECT.getActionName());
         actionButton.setToolTipText("Action button");
