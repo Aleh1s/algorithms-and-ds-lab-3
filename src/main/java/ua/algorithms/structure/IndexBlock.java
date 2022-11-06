@@ -66,7 +66,7 @@ public class IndexBlock {
         TreeMap<Long, IndexRecord> partOfRecords = new TreeMap<>();
         List<IndexRecord> values = valueOf(records.values());
 
-        int length = values.size() / 2; // 32
+        int length = values.size() / 2;
 
         records.clear();
 

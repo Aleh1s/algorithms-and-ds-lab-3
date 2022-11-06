@@ -1,10 +1,9 @@
 package ua.algorithms.gui;
 
+import ua.algorithms.mvc.Controller;
+
 import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import static ua.algorithms.gui.BasicAction.*;
 
@@ -18,11 +17,11 @@ public class SimpleGUI extends JFrame {
     private JTextArea outputArea;
     private JTextField valueInputField;
     private JTextField pkInputField;
+    private final Controller controller;
 
-
-
-    public SimpleGUI() {
+    public SimpleGUI(Controller controller) {
         super("DBMS");
+        this.controller = controller;
     }
 
     public void init() {
@@ -76,37 +75,40 @@ public class SimpleGUI extends JFrame {
 
         selectRadio.addActionListener(e -> {
             actionButton.setText(SELECT.getActionName());
-            pkInputField.setEditable(true);
             valueInputField.setEditable(false);
         });
 
         insertRadio.addActionListener(e -> {
             actionButton.setText(INSERT.getActionName());
-            pkInputField.setEditable(true);
             valueInputField.setEditable(true);
         });
 
         updateRadio.addActionListener(e -> {
             actionButton.setText(UPDATE.getActionName());
-            pkInputField.setEditable(true);
             valueInputField.setEditable(true);
         });
 
         deleteRadio.addActionListener(e -> {
             actionButton.setText(DELETE.getActionName());
-            pkInputField.setEditable(true);
             valueInputField.setEditable(false);
         });
 
         actionButton.addActionListener(e -> {
+            String pk = pkInputField.getText();
             if (selectRadio.isSelected()) {
-
+                String message = controller.select(pk);
+                outputArea.setText(message);
             } else if (insertRadio.isSelected()) {
-
+                String value = valueInputField.getText();
+                String message = controller.insert(pk, value);
+                outputArea.setText(message);
             } else if (updateRadio.isSelected()) {
-
+                String value = valueInputField.getText();
+                String message = controller.update(pk, value);
+                outputArea.setText(message);
             } else {
-
+                String message = controller.delete(pk);
+                outputArea.setText(message);
             }
         });
         

@@ -25,11 +25,13 @@ public class DatumRecord implements Comparable<DatumRecord> {
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("DatumRecord{");
-        sb.append("id=").append(id);
-        sb.append(", value='").append(value).append('\'');
-        sb.append('}');
-        return sb.toString();
+
+        return """
+                {
+                    id: %d,
+                    value: %s
+                }
+                """.formatted(id, value);
     }
 
     @Override

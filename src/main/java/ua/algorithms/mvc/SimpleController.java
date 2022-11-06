@@ -17,7 +17,7 @@ public class SimpleController implements Controller {
     private static final String VIOLATION_OF_CONSTRAINT = "Violation of constraint. Value length must be <= 60 but actually [%d]";
     private static final String RECORDS_AFFECTED = "%d records was affected";
     @Override
-    public String findByPk(String pk) {
+    public String select(String pk) {
         long id;
         try {
             id = Long.parseLong(pk);
