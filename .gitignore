@@ -34,4 +34,5 @@ build/
 ### Mac OS ###
 .DS_Store
 
-**/*.bin
+src/main/resources/*.bin
+src/test/resources/*.bin
