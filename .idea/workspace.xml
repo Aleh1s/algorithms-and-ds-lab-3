@@ -6,9 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="a622ef3d-6af8-4ca7-afc7-4235ba35ed0e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/mvc/model/SimpleRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/mvc/model/SimpleRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/mvc/view/SimpleGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/mvc/view/SimpleGUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ua/algorithms/structure/IndexBlock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ua/algorithms/structure/IndexBlock.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,14 +39,14 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "D:/KPI/Algorithms/Labs/lab-3.1/algorithms-and-ds-lab-3/src/main",
+    "last_opened_file_path": "D:/Programming/topic08",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "preferences.fileTypes"
   }
 }]]></component>
@@ -59,17 +56,22 @@
       <recent name="ua.algorithms.serializer" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\KPI\Algorithms\Labs\lab-3-completed\src\main" />
+      <recent name="D:\KPI\Algorithms\Labs\lab-3-completed\src\main\java" />
       <recent name="D:\KPI\Algorithms\Labs\lab-3.1\algorithms-and-ds-lab-3\src\main" />
       <recent name="D:\KPI\Algorithms\Labs\lab-3\src\main\java\ua\algorithms\mvc\view" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\KPI\Algorithms\Labs\lab-3-completed\src" />
+    </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="JUnit.RepositoryTest">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="ua.algorithms.Main" />
-      <module name="algorithms-and-ds-lab-3" />
+      <module name="lab-3-completed" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="ua.algorithms.serializer.*" />
+          <option name="PATTERN" value="ua.algorithms.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -77,9 +79,76 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="RepositoryTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="lab-3-completed" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ua.algorithms.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ua.algorithms" />
+      <option name="MAIN_CLASS_NAME" value="ua.algorithms.RepositoryTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RepositoryTest.deleteAll" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="lab-3-completed" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ua.algorithms.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ua.algorithms" />
+      <option name="MAIN_CLASS_NAME" value="ua.algorithms.RepositoryTest" />
+      <option name="METHOD_NAME" value="deleteAll" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RepositoryTest.deleteTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="lab-3-completed" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ua.algorithms.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ua.algorithms" />
+      <option name="MAIN_CLASS_NAME" value="ua.algorithms.RepositoryTest" />
+      <option name="METHOD_NAME" value="deleteTest(ua.algorithms.structure.DatumRecord)" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RepositoryTest.updateEmailTest (1)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="lab-3-completed" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ua.algorithms.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ua.algorithms" />
+      <option name="MAIN_CLASS_NAME" value="ua.algorithms.RepositoryTest" />
+      <option name="METHOD_NAME" value="updateEmailTest(ua.algorithms.structure.DatumRecord,java.lang.String,java.lang.String)" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.RepositoryTest" />
         <item itemvalue="Application.Main" />
+        <item itemvalue="JUnit.RepositoryTest.deleteAll" />
+        <item itemvalue="JUnit.RepositoryTest.deleteTest" />
+        <item itemvalue="JUnit.RepositoryTest.updateEmailTest (1)" />
       </list>
     </recent_temporary>
   </component>
@@ -106,6 +175,13 @@
       <workItem from="1667725440023" duration="12775000" />
       <workItem from="1667745006182" duration="7868000" />
       <workItem from="1667755224440" duration="92000" />
+      <workItem from="1667756272218" duration="131000" />
+      <workItem from="1667823028767" duration="486000" />
+      <workItem from="1668073165890" duration="240000" />
+      <workItem from="1668074463425" duration="46000" />
+      <workItem from="1668094455885" duration="1223000" />
+      <workItem from="1668187058444" duration="168000" />
+      <workItem from="1668672842484" duration="9603000" />
     </task>
     <servers />
   </component>

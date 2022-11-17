@@ -96,4 +96,18 @@ public class IndexBlock {
         return valueOf(records.values());
     }
 
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("IndexBlock{");
+        sb.append("size=").append(size);
+        sb.append(", index=").append(index);
+        List<IndexRecord> recordList = new ArrayList<>(records.values());
+        sb.append(", fromTo=")
+                .append("[").append(recordList.get(0).pk())
+                .append("; ")
+                .append(recordList.get(recordList.size() - 1).pk())
+                .append("]");
+        sb.append('}');
+        return sb.toString();
+    }
 }

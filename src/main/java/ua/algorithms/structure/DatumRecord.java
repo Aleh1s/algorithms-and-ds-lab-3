@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -63,6 +65,26 @@ public class DatumRecord implements Comparable<DatumRecord> {
                     email: %s
                 }
                 """.formatted(id, firstName, lastName, email);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DatumRecord that)) return false;
+
+        if (id != that.id) return false;
+        if (!Objects.equals(firstName, that.firstName)) return false;
+        if (!Objects.equals(lastName, that.lastName)) return false;
+        return Objects.equals(email, that.email);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        return result;
     }
 
     @Override

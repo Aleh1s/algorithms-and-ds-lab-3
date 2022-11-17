@@ -19,7 +19,7 @@ public class SimpleController implements Controller {
     private static final String INVALID_INPUT = "Invalid input";
     private static final String VIOLATION_OF_LENGTH_CONSTRAINT = "Violation of constraint. Value [%s] length must be <= [%d] but actually [%d]";
     private static final String VIOLATION_OF_EMPTY_VALUE_CONSTANT = "Violation of constraint. Value [%s] length must be present";
-    private static final String RECORDS_AFFECTED = "%d records was affected";
+    private static final String RECORDS_AFFECTED = "%d record was affected";
     private static final String FIRST_NAME_FIELD = "first name";
     private static final String LAST_NAME_FIELD = "last name";
     private static final String EMAIL = "email";

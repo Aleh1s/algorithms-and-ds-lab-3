@@ -1,6 +1,5 @@
 package ua.algorithms;
 
-import lombok.SneakyThrows;
 import ua.algorithms.accessor.FileAccessor;
 import ua.algorithms.accessor.GlobalFileAccessor;
 import ua.algorithms.accessor.IndexFileAccessor;
@@ -12,7 +11,6 @@ import ua.algorithms.mvc.view.SimpleGUI;
 
 
 public class Main {
-    @SneakyThrows
     public static void main(String[] args) {
         IndexFileAccessor indexFileAccessor =
                 (IndexFileAccessor) FileAccessor.of("src/main/resources/index.bin", "INDEX");

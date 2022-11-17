@@ -28,7 +28,6 @@ public class SimpleRepository implements Model {
 
     public Optional<DatumRecord> findById(long id) {
         Optional<IndexBlock> indexBlockOptional = searchIndexBlock(id);
-        System.out.println("Number of comparing: " + counter);
 
         if (indexBlockOptional.isPresent()) {
             IndexBlock indexBlock = indexBlockOptional.get();
@@ -113,17 +112,18 @@ public class SimpleRepository implements Model {
             if (curr.isEmpty()) {
                 int numberOfBlocks = indexArea.countNumberOfBlocks();
 
+                int temp = curr.getIndex();
                 IndexBlock next;
                 while (true) {
-                    if (curr.getIndex() == numberOfBlocks - 1) {
+                    if (temp == numberOfBlocks - 1) {
                         indexArea.setLength(indexArea.getSizeOfFile() - IndexBlock.BYTES);
                         return number;
                     }
 
-                    next = indexArea.readBlock(curr.getIndex() + 1);
-                    next.setIndex(curr.getIndex());
-                    indexArea.write(next, curr.getIndex());
-                    curr = next;
+                    next = indexArea.readBlock(temp + 1);
+                    temp = next.getIndex();
+                    next.setIndex(next.getIndex() - 1);
+                    indexArea.write(next, next.getIndex());
                 }
             } else {
                 if (number > 0) {
@@ -142,23 +142,22 @@ public class SimpleRepository implements Model {
         if (curr.getIndex() == numberOfBlocks - 1) {
             indexArea.write(curr, curr.getIndex());
             indexArea.write(temp, temp.getIndex());
-            return;
-        }
+        } else {
+            IndexBlock next = indexArea.readBlock(curr.getIndex() + 1);
+            while (true) {
+                if (next.getIndex() == numberOfBlocks - 1) {
+                    temp.setIndex(next.getIndex());
+                    indexArea.write(temp, next.getIndex());
+                    next.setIndex(next.getIndex() + 1);
+                    indexArea.write(next, next.getIndex());
+                    return;
+                }
 
-        IndexBlock next = indexArea.readBlock(curr.getIndex() + 1);
-        while (true) {
-            if (next.getIndex() == numberOfBlocks - 1) {
                 temp.setIndex(next.getIndex());
                 indexArea.write(temp, next.getIndex());
-                next.setIndex(next.getIndex() + 1);
-                indexArea.write(next, next.getIndex());
-                return;
+                temp = next;
+                next = indexArea.readBlock(temp.getIndex() + 1);
             }
-
-            temp.setIndex(next.getIndex());
-            indexArea.write(temp, next.getIndex());
-            temp = next;
-            next = indexArea.readBlock(temp.getIndex() + 1);
         }
     }
 
